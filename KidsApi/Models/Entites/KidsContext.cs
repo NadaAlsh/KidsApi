@@ -1,6 +1,15 @@
-﻿namespace KidsApi.Models.Entites
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace KidsApi.Models.Entites
 {
-    public class KidsContext
+    public class KidsContext : DbContext
     {
+        public KidsContext(DbContextOptions<KidsContext> options) : base(options)
+        {
+
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+        }
     }
 }
