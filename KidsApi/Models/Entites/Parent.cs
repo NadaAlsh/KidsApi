@@ -27,6 +27,7 @@
                 IsAdmin = isAdmin,
             };
         }
-        public bool VerifyPassword(string password) => BCrypt.Net.BCrypt.EnhancedVerify(password, Password);
+
+        //public bool VerifyPassword(string password) => BCrypt.Net.BCrypt.EnhancedVerify(password, Password);
     }
 }

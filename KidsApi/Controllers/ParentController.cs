@@ -20,7 +20,7 @@ namespace KidsApi.Controllers
             this.service = service;
             this.context = context;
         }
-        [HttpPost]
+        [HttpPost("Login")]
         public IActionResult Login(UserLoginRequest loginDetails)
         {
 
@@ -37,8 +37,8 @@ namespace KidsApi.Controllers
         {
 
             var newUser = Parent.Create(request.Username, request.Password , request.PhoneNumber,request.Email, request.IsAdmin);
-            newUser.Username = request.Username;
-            newUser.Password = request.Password;
+            //newUser.Username = request.Username;
+            //newUser.Password = request.Password;
            
             context.Parent.Add(newUser);
             context.SaveChanges();
