@@ -17,6 +17,7 @@ namespace KidsApi.Services
             this.context = context;
         }
 
+
         internal object GenerateToken(object username, object password)
         {
             throw new NotImplementedException();
@@ -29,6 +30,22 @@ namespace KidsApi.Services
                 return (false, "");
             }
             var userAccount = context.Children.SingleOrDefault(r => r.Username == username);
+
+           new Claim(TokenClaimsConstant.Username, username),
+        new Claim(TokenClaimsConstant.UserId, userAccount.Id.ToString()),
+       // new Claim(ClaimTypes.Role, userAccount.IsAdmin ? "Admin" : "User")
+          
+     };
+    }
+  
+        public (bool IsValid, string Token) GenerateToken(string username, string password)
+        {
+            //if (username != "admin" || password != "admin")
+            //{
+            //    return (false, "");
+            //}
+            var userAccount = context.Parent.SingleOrDefault(r => r.Username == username);
+
             if (userAccount == null)
             {
                 return (false, "");
@@ -46,9 +63,11 @@ namespace KidsApi.Services
             // From here
             var claims = new[]
             {
-        new Claim(TokenClaimsConstant.Username, username),
-        new Claim(TokenClaimsConstant.UserId, userAccount.Id.ToString()),
-       // new Claim(ClaimTypes.Role, userAccount.IsAdmin ? "Admin" : "User")
+
+                new Claim(TokenClaimsConstant.Username, username),
+                new Claim(TokenClaimsConstant.UserId, userAccount.Id.ToString()),
+                new Claim(ClaimTypes.Role, userAccount.IsAdmin ? "Admin" : "User")
+
         };
             // To Here
             var token = new JwtSecurityToken(
@@ -61,7 +80,10 @@ namespace KidsApi.Services
             return (true, generatedToken);
         }
     }
-    }
+
+
+}
+
 
 
 
