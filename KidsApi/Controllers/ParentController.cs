@@ -46,5 +46,47 @@ namespace KidsApi.Controllers
             return Ok(new { Message = "User Created" });
 
         }
+
+        [HttpGet("Details/{id}")]
+        [ProducesResponseType(typeof(ChildAccountResponce), 200)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<ChildAccountResponce> Details([FromRoute] int id)
+        {
+
+            var child = context.Children.Find(id);
+            if (child == null)
+            {
+                return NotFound();
+            }
+            return Ok(new ChildAccountResponce
+            {
+                Id = child.Id,
+                Username = child.Username,
+                Password = child.Password,
+                SavingsAccountNumber = child.SavingsAccountNumber,
+                BaitiAccountNumber = child.BaitiAccountNumber,
+                Points = child.Points,
+               // Tasks = child.Tasks,
+
+
+            });
+        }
+        [HttpPost]
+        public IActionResult Add(AddChildRequest req)
+        {
+            var newChild = new Child()
+            {
+                Username = req.Username,
+                Password = req.Password,
+                SavingsAccountNumber = req.SavingsAccountNumber,
+                Points = req.Points,
+
+
+            };
+            context.Children.Add(newChild);
+            context.SaveChanges();
+
+            return CreatedAtAction(nameof(Details), new { Id = newChild.Id }, newChild);
+        }
     }
 }
