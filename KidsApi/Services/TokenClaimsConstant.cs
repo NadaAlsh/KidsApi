@@ -3,8 +3,8 @@
     public class TokenClaimsConstant
     {
        
-            public static readonly string Username = "BaitiDB.Username";
-            public static readonly string UserId = "BaitiDB.UserId";
+            public static readonly string Username = "nada.Username";
+            public static readonly string UserId = "nada.UserId";
         
     }
 }
