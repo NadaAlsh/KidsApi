@@ -4,6 +4,7 @@ using KidsApi.Models.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KidsApi.Migrations
 {
     [DbContext(typeof(KidsContext))]
-    partial class KidsContextModelSnapshot : ModelSnapshot
+    [Migration("20240522094639_trylog")]
+    partial class trylog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,7 +117,7 @@ namespace KidsApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Children");
+                    b.ToTable("Child");
                 });
 
             modelBuilder.Entity("KidsApi.Models.Entites.Parent", b =>

@@ -6,9 +6,12 @@
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public List<Child> Children { get; set; }
+        public int ChildId { get; set; }
         public string PhoneNumber { get; set; }
         public bool IsAdmin { get; set; }
+
+
+        public ICollection<Task> Tasks { get; set; } = new List<Task>();
 
         public List<Reward> Rewards { get; set; }
 
