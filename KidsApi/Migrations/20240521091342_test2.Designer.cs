@@ -4,6 +4,7 @@ using KidsApi.Models.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KidsApi.Migrations
 {
     [DbContext(typeof(KidsContext))]
-    partial class KidsContextModelSnapshot : ModelSnapshot
+    [Migration("20240521091342_test2")]
+    partial class test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,63 +25,19 @@ namespace KidsApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CategoryTask", b =>
+            modelBuilder.Entity("ChildTask", b =>
                 {
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TasksId")
                         .HasColumnType("int");
 
-                    b.HasKey("CategoryId", "TasksId");
-
-                    b.HasIndex("TasksId");
-
-                    b.ToTable("CategoryTask");
-                });
-
-            modelBuilder.Entity("KidsApi.Models.Entites.Category", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("childrenId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+                    b.HasKey("TasksId", "childrenId");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("childrenId");
 
-                    b.HasKey("CategoryId");
-
-                    b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            CategoryId = 1,
-                            Name = "Clean"
-                        },
-                        new
-                        {
-                            CategoryId = 2,
-                            Name = "Play"
-                        },
-                        new
-                        {
-                            CategoryId = 3,
-                            Name = "Outdoor Activity"
-                        },
-                        new
-                        {
-                            CategoryId = 4,
-                            Name = "Study"
-                        },
-                        new
-                        {
-                            CategoryId = 5,
-                            Name = "Other"
-                        });
+                    b.ToTable("ChildTask");
                 });
 
             modelBuilder.Entity("KidsApi.Models.Entites.Child", b =>
@@ -109,10 +68,9 @@ namespace KidsApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isCompleted")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Children");
                 });
@@ -124,9 +82,6 @@ namespace KidsApi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ChildId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -160,9 +115,6 @@ namespace KidsApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
@@ -180,59 +132,38 @@ namespace KidsApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("childId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("isCompleted")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
-
-                    b.HasIndex("childId");
 
                     b.ToTable("Task");
                 });
 
-            modelBuilder.Entity("CategoryTask", b =>
+            modelBuilder.Entity("ChildTask", b =>
                 {
-                    b.HasOne("KidsApi.Models.Entites.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("KidsApi.Models.Entites.Task", null)
                         .WithMany()
                         .HasForeignKey("TasksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("KidsApi.Models.Entites.Task", b =>
-                {
-                    b.HasOne("KidsApi.Models.Entites.Parent", null)
-                        .WithMany("Tasks")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.HasOne("KidsApi.Models.Entites.Child", null)
-                        .WithMany("Tasks")
-                        .HasForeignKey("childId")
+                        .WithMany()
+                        .HasForeignKey("childrenId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("KidsApi.Models.Entites.Child", b =>
                 {
-                    b.Navigation("Tasks");
+                    b.HasOne("KidsApi.Models.Entites.Parent", null)
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("KidsApi.Models.Entites.Parent", b =>
                 {
-                    b.Navigation("Tasks");
+                    b.Navigation("Children");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,7 +3,10 @@ using KidsApi.Models.Requests;
 using KidsApi.Models.Responses;
 using KidsApi.Services;
 using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.AspNetCore.Mvc.Rendering;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace KidsApi.Controllers
 {
@@ -23,6 +26,7 @@ namespace KidsApi.Controllers
         }
 
         [HttpPost("login")]
+
         public IActionResult Login(UserLoginRequest loginDetails)
         {
 
@@ -39,9 +43,11 @@ namespace KidsApi.Controllers
         {
 
             var newUser = Parent.Create(request.Username, request.Password , request.PhoneNumber,request.Email, request.IsAdmin);
+
             newUser.Username = request.Username;
             //newUser.Password = request.Password;
             newUser.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password);
+
 
             context.Parent.Add(newUser);
             context.SaveChanges();
@@ -100,5 +106,95 @@ namespace KidsApi.Controllers
 
             return categories;
         }
+
+        [HttpGet("Details/{id}")]
+        [ProducesResponseType(typeof(ChildAccountResponce), 200)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<ChildAccountResponce> Details([FromRoute] int id)
+        {
+
+            var child = context.Children.Find(id);
+            if (child == null)
+            {
+                return NotFound();
+            }
+            return Ok(new ChildAccountResponce
+            {
+                Id = child.Id,
+                Username = child.Username,
+                Password = child.Password,
+                SavingsAccountNumber = child.SavingsAccountNumber,
+                BaitiAccountNumber = child.BaitiAccountNumber,
+                Points = child.Points,
+
+            });
+        }
+        [HttpPost]
+        public IActionResult Add(AddChildRequest req)
+        {
+            var newChild = new Child()
+            {
+                Id = req.Id,
+                Username = req.Username,
+                Password = req.Password,
+                SavingsAccountNumber = req.SavingsAccountNumber,
+                Points = req.Points,
+                ParentId = req.ParentId,
+
+            };
+            context.Children.Add(newChild);
+            context.SaveChanges();
+
+            return CreatedAtAction(nameof(Details), new { Id = newChild.Id }, newChild);
+        }
+
+        [HttpGet("GetChildren/{parentId}")]
+        public IActionResult GetChildren(int parentId)
+        {
+            var children = context.Children
+                .Where(c => c.ParentId == parentId)
+                .ToList();
+
+            if (children == null || children.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(children);
+        }
+
+        [HttpPost("AddReward")]
+        public IActionResult Add(AddRewardRequest req)
+        {
+            var newReward = new Reward()
+            {
+                Id = req.Id,
+                RequiredPoints = req.RequiredPoints,
+                Description = req.Description,
+                RewardType = req.RewardType,
+                children = req.children
+            };
+
+            context.Rewards.Add(newReward);
+            context.SaveChanges();
+
+            return CreatedAtAction(nameof(Details), new { Id = newReward.Id }, newReward);
+        }
+
+        [HttpGet]
+        public IActionResult GetAllRewards()
+        {
+            var rewards = context.Rewards.ToList();
+
+            if (rewards == null || rewards.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(rewards);
+        }
+      }
+
     }
-}
+
+

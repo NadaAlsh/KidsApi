@@ -15,6 +15,7 @@ namespace KidsApi.Models.Entites
         public ICollection<Task> Tasks { get; set; } = new List<Task>();
         
 
+        public ICollection<Reward> Rewards { get; set; } = new List<Reward>();
 
         public KidsContext(DbContextOptions<KidsContext> options) : base(options)
         {

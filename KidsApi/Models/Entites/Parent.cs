@@ -10,7 +10,11 @@
         public string PhoneNumber { get; set; }
         public bool IsAdmin { get; set; }
 
+
         public ICollection<Task> Tasks { get; set; } = new List<Task>();
+
+        public List<Reward> Rewards { get; set; }
+
 
         private Parent() { }
 
@@ -27,6 +31,7 @@
                 IsAdmin = isAdmin,
             };
         }
-        public bool VerifyPassword(string password) => BCrypt.Net.BCrypt.EnhancedVerify(password, Password);
+
+        //public bool VerifyPassword(string password) => BCrypt.Net.BCrypt.EnhancedVerify(password, Password);
     }
 }
