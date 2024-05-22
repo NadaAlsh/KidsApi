@@ -10,6 +10,7 @@
         public string PhoneNumber { get; set; }
         public bool IsAdmin { get; set; }
 
+        public List<Reward> Rewards { get; set; }
 
 
         private Parent() { }

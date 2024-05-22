@@ -3,6 +3,7 @@ using KidsApi.Models.Requests;
 using KidsApi.Models.Responses;
 using KidsApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace KidsApi.Controllers
 {
@@ -66,8 +67,6 @@ namespace KidsApi.Controllers
                 SavingsAccountNumber = child.SavingsAccountNumber,
                 BaitiAccountNumber = child.BaitiAccountNumber,
                 Points = child.Points,
-               // Tasks = child.Tasks,
-
 
             });
         }
@@ -89,5 +88,53 @@ namespace KidsApi.Controllers
 
             return CreatedAtAction(nameof(Details), new { Id = newChild.Id }, newChild);
         }
+
+        [HttpGet("GetChildren/{parentId}")]
+        public IActionResult GetChildren(int parentId)
+        {
+            var children = context.Children
+                .Where(c => c.ParentId == parentId)
+                .ToList();
+
+            if (children == null || children.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(children);
+        }
+
+        [HttpPost("AddReward")]
+        public IActionResult Add(AddRewardRequest req)
+        {
+            var newReward = new Reward()
+            {
+                Id = req.Id,
+                RequiredPoints = req.RequiredPoints,
+                Description = req.Description,
+                RewardType = req.RewardType,
+                children = req.children
+            };
+
+            context.Rewards.Add(newReward);
+            context.SaveChanges();
+
+            return CreatedAtAction(nameof(Details), new { Id = newReward.Id }, newReward);
+        }
+
+        [HttpGet]
+        public IActionResult GetAllRewards()
+        {
+            var rewards = context.Rewards.ToList();
+
+            if (rewards == null || rewards.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(rewards);
+        }
+      }
     }
-}
+
+
