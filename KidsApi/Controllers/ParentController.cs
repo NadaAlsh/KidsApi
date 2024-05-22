@@ -76,11 +76,12 @@ namespace KidsApi.Controllers
         {
             var newChild = new Child()
             {
+                Id = req.Id,
                 Username = req.Username,
                 Password = req.Password,
                 SavingsAccountNumber = req.SavingsAccountNumber,
                 Points = req.Points,
-
+                ParentId = req.ParentId,
 
             };
             context.Children.Add(newChild);
