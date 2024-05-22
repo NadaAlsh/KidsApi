@@ -13,7 +13,7 @@ namespace KidsApi.Models.Entites
         public int BaitiAccountNumber { get; set; }
         public int SavingsAccountNumber { get; set; }
         public List<Task> Tasks { get; set; }
-        public List<Request> Requests { get; set; }
+   //     public List<Request> Requests { get; set; }
 
 
     }
