@@ -3,6 +3,7 @@ using KidsApi.Models.Requests;
 using KidsApi.Models.Responses;
 using KidsApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace KidsApi.Controllers
 {
@@ -20,7 +21,8 @@ namespace KidsApi.Controllers
             this.service = service;
             this.context = context;
         }
-        [HttpPost]
+
+        [HttpPost("login")]
         public IActionResult Login(UserLoginRequest loginDetails)
         {
 
@@ -38,13 +40,65 @@ namespace KidsApi.Controllers
 
             var newUser = Parent.Create(request.Username, request.Password , request.PhoneNumber,request.Email, request.IsAdmin);
             newUser.Username = request.Username;
-            newUser.Password = request.Password;
-           
+            //newUser.Password = request.Password;
+            newUser.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password);
+
             context.Parent.Add(newUser);
             context.SaveChanges();
 
             return Ok(new { Message = "User Created" });
 
+        }
+
+        [HttpGet("{parentId}/tasks")]
+        public IActionResult GetTasks(int parentId)
+        {
+            var tasks = context.Tasks.Where(t => t.ParentId == parentId).ToList();
+            if (tasks.Any())
+            {
+                return Ok(tasks);
+            }
+            return NotFound("No tasks found for this parent.");
+        }
+
+        [HttpPost("AddTask")]
+        public IActionResult PostTask(TaskRequest request)
+        {
+            var category = context.Categories.FirstOrDefault(c => c.CategoryId == request.CategoryId);
+
+
+            if (category == null)
+            {
+                return BadRequest("Invalid category ID.");
+            }
+            var newTask = new Models.Entites.Task
+            {
+               
+                TaskType = request.TaskType,
+                Description = request.Description,
+                Date = request.Date,
+                Points = request.Points,
+                childId = request.ChildId,
+                CategoryId = category.CategoryId
+
+
+            };
+
+            context.Tasks.Add(newTask);
+            context.SaveChanges();
+
+            return Ok(new { Message = "Task created", TaskId = newTask.Id });
+        }
+
+        private List<SelectListItem> GetCategories()
+        {
+            var categories = context.Categories.Select(c => new SelectListItem
+            {
+                Value = c.CategoryId.ToString(),
+                Text = c.Name
+            }).ToList();
+
+            return categories;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace KidsApi.Controllers
         [HttpPost("Login")]
         public IActionResult ChildLogin(ChildLoginRequest request)
         {
-            var response = _service.GenerateToken(request.Username, request.Password);
+            var response = _service.ChildGenerateToken(request.Username, request.Password);
 
             if (response.IsValid)
             {
@@ -31,6 +31,9 @@ namespace KidsApi.Controllers
             {
                 return BadRequest("Username and/or Password is wrong");
             }
+
+
+
         }
               public class UserLogin()
         {
@@ -38,11 +41,31 @@ namespace KidsApi.Controllers
             public string Password { get; set; }
         }
 
-            
-      
 
-          
-
+        [HttpGet]
+        public IActionResult GetTasks(int parentId)
+        {
+            var tasks = _context.Tasks.Where(t => t.ParentId == parentId).ToList();
+            return Ok(tasks);
         }
+
+        [HttpPut("{childId}/tasks/{taskId}/complete")]
+        public IActionResult CompleteTask(int childId, int taskId)
+        {
+            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
+            var task = child.Tasks.FirstOrDefault(t => t.Id == taskId);
+
+            if (child == null || task == null)
+            {
+                return NotFound();
+            }
+
+            task.isCompleted = true;
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+    }
     }
 
