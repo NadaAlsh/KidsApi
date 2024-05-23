@@ -8,10 +8,12 @@
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public bool IsAdmin { get; set; }
+
+
         public ICollection<Task> Tasks { get; set; } = new List<Task>();
 
         public List<Reward> Rewards { get; set; }
-
+        public decimal Balance { get; internal set; }
 
         private Parent() { }
 

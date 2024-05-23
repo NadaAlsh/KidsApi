@@ -130,8 +130,8 @@ namespace KidsApi.Controllers
 
             });
         }
-        [HttpPost]
-        public IActionResult Add(AddChildRequest req)
+        [HttpPost("AddChild")]
+        public IActionResult AddChild(AddChildRequest req)
         {
             var newChild = new Child()
             {
@@ -194,8 +194,44 @@ namespace KidsApi.Controllers
 
             return Ok(rewards);
         }
-      }
 
+
+        [HttpGet("balance")]
+        public ActionResult<GetBalanceResponse> GetBalance(int parentId)
+        {
+            var parent = context.Parent.FirstOrDefault(p => p.Id == parentId);
+            if (parent == null)
+            {
+                return NotFound();
+            }
+
+            var balanceResponse = new GetBalanceResponse
+            {
+                Balance = parent.Balance
+            };
+
+            return Ok(balanceResponse);
+        }
+
+        [HttpGet("children/{childId}/points")]
+        public ActionResult<decimal> GetChildPoints(int childId)
+        {
+            var child = context.Child.FirstOrDefault(c => c.Id == childId);
+            if (child == null)
+            {
+                return NotFound();
+            }
+
+            var pointsResponse = new PointsResponse
+            {
+                Points = child.Points
+            };
+
+            return Ok(pointsResponse);
+        }
     }
+}
+
+   
 
 
