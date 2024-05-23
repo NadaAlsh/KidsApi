@@ -127,6 +127,7 @@ namespace KidsApi.Controllers
                 BaitiAccountNumber = child.BaitiAccountNumber,
                 Points = child.Points,
 
+
             });
         }
         [HttpPost]
