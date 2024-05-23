@@ -113,7 +113,7 @@ namespace KidsApi.Controllers
         public ActionResult<ChildAccountResponce> Details([FromRoute] int id)
         {
 
-            var child = context.Children.Find(id);
+            var child = context.Child.Find(id);
             if (child == null)
             {
                 return NotFound();
@@ -142,7 +142,7 @@ namespace KidsApi.Controllers
                 ParentId = req.ParentId,
 
             };
-            context.Children.Add(newChild);
+            context.Child.Add(newChild);
             context.SaveChanges();
 
             return CreatedAtAction(nameof(Details), new { Id = newChild.Id }, newChild);
@@ -151,7 +151,7 @@ namespace KidsApi.Controllers
         [HttpGet("GetChildren/{parentId}")]
         public IActionResult GetChildren(int parentId)
         {
-            var children = context.Children
+            var children = context.Child
                 .Where(c => c.ParentId == parentId)
                 .ToList();
 
@@ -163,23 +163,23 @@ namespace KidsApi.Controllers
             return Ok(children);
         }
 
-        [HttpPost("AddReward")]
-        public IActionResult Add(AddRewardRequest req)
-        {
-            var newReward = new Reward()
-            {
-                Id = req.Id,
-                RequiredPoints = req.RequiredPoints,
-                Description = req.Description,
-                RewardType = req.RewardType,
-                children = req.children
-            };
+        //[HttpPost("AddReward")]
+        //public IActionResult Add(AddRewardRequest req)
+        //{
+        //    var newReward = new Reward()
+        //    {
+        //        Id = req.Id,
+        //        RequiredPoints = req.RequiredPoints,
+        //        Description = req.Description,
+        //        RewardType = req.RewardType,
+        //        children = req.children
+        //    };
 
-            context.Rewards.Add(newReward);
-            context.SaveChanges();
+        //    context.Rewards.Add(newReward);
+        //    context.SaveChanges();
 
-            return CreatedAtAction(nameof(Details), new { Id = newReward.Id }, newReward);
-        }
+        //    return CreatedAtAction(nameof(Details), new { Id = newReward.Id }, newReward);
+        //}
 
         [HttpGet]
         public IActionResult GetAllRewards()
