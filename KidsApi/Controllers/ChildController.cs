@@ -66,6 +66,57 @@ namespace KidsApi.Controllers
             return Ok();
         }
 
-    }
-    }
 
+        [HttpGet("{childId}/balance")]
+        public ActionResult<GetBalanceResponse> GetBalance(int childId)
+        {
+            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
+            if (child == null)
+            {
+                return NotFound();
+            }
+
+            var balanceResponse = new GetBalanceResponse
+            {
+                Balance = child.Points
+            };
+
+            return Ok(balanceResponse);
+        }
+
+
+        [HttpGet("GetPoints/{childId}")]
+        public ActionResult<PointsResponse> GetPoints(int childId)
+        {
+            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
+            if (child == null)
+            {
+                return NotFound();
+            }
+
+            var pointsResponse = new PointsResponse
+            {
+                Points = child.Points
+            };
+
+            return Ok(pointsResponse);
+        }
+
+        [HttpPut("AddPoints/{childId}")]
+        public IActionResult AddPoints(int childId, AddPointsRequest request)
+        {
+            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
+            if (child == null)
+            {
+                return NotFound();
+            }
+
+            child.Points += request.PointsToAdd;
+            _context.SaveChanges();
+
+            return Ok(new { Message = "Points added successfully." });
+        }
+    }
+}
+    
+ 
