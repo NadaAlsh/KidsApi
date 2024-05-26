@@ -79,6 +79,27 @@ namespace KidsApi.Controllers
             return Ok(tasks);
         }
 
+        //[HttpPut("{childId}/tasks/{taskId}/complete")]
+        //public IActionResult CompleteTask(int childId, int taskId)
+        //{
+        //    var child = _context.Child.Include(c => c.Tasks).FirstOrDefault(c => c.Id == childId);
+        //    if (child == null)
+        //    {
+        //        return NotFound(new { message = "Child not found" });
+        //    }
+
+        //    var task = child.Tasks.FirstOrDefault(t => t.Id == taskId);
+        //    if (task == null)
+        //    {
+        //        return NotFound(new { message = "Task not found" });
+        //    }
+
+        //    task.isCompleted = true;
+        //    _context.SaveChanges();
+
+        //    return Ok();
+        //}
+
         [HttpPut("{childId}/tasks/{taskId}/complete")]
         public IActionResult CompleteTask(int childId, int taskId)
         {
@@ -94,13 +115,15 @@ namespace KidsApi.Controllers
                 return NotFound(new { message = "Task not found" });
             }
 
+            var pointsToAdd = task.Points;
+            child.Points += pointsToAdd;
+            _context.SaveChanges();
+
             task.isCompleted = true;
             _context.SaveChanges();
 
-            return Ok();
+            return Ok(new { Message = "Points added successfully and task completed." });
         }
-
-
 
 
         [HttpGet("{childId}/balance")]
@@ -138,20 +161,20 @@ namespace KidsApi.Controllers
             return Ok(pointsResponse);
         }
 
-        [HttpPut("AddPoints/{childId}")]
-        public IActionResult AddPoints(int childId, AddPointsRequest request)
-        {
-            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
-            if (child == null)
-            {
-                return NotFound();
-            }
+        //[HttpPut("AddPoints/{childId}")]
+        //public IActionResult AddPoints(int childId, AddPointsRequest request)
+        //{
+        //    var child = _context.Child.FirstOrDefault(c => c.Id == childId);
+        //    if (child == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            child.Points += request.PointsToAdd;
-            _context.SaveChanges();
+        //    child.Points += request.PointsToAdd;
+        //    _context.SaveChanges();
 
-            return Ok(new { Message = "Points added successfully." });
-        }
+        //    return Ok(new { Message = "Points added successfully." });
+        //}
     }
 }
 
