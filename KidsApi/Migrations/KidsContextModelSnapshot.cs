@@ -22,21 +22,6 @@ namespace KidsApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CategoryTask", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TasksId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CategoryId", "TasksId");
-
-                    b.HasIndex("TasksId");
-
-                    b.ToTable("CategoryTask");
-                });
-
             modelBuilder.Entity("KidsApi.Models.Entites.Category", b =>
                 {
                     b.Property<int>("CategoryId")
@@ -92,6 +77,9 @@ namespace KidsApi.Migrations
                     b.Property<int>("BaitiAccountNumber")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
 
@@ -124,14 +112,14 @@ namespace KidsApi.Migrations
 
             modelBuilder.Entity("KidsApi.Models.Entites.Parent", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ParentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ParentId"));
 
-                    b.Property<int>("ChildId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -152,9 +140,27 @@ namespace KidsApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ParentId");
 
                     b.ToTable("Parent");
+                });
+
+            modelBuilder.Entity("KidsApi.Models.Entites.ParentChildRelationship", b =>
+                {
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParentChildRelationshipId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ParentId", "ChildId");
+
+                    b.HasIndex("ChildId");
+
+                    b.ToTable("ParentChildRelationships");
                 });
 
             modelBuilder.Entity("KidsApi.Models.Entites.Reward", b =>
@@ -222,6 +228,8 @@ namespace KidsApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("ParentId");
 
                     b.HasIndex("childId");
@@ -229,26 +237,30 @@ namespace KidsApi.Migrations
                     b.ToTable("Task");
                 });
 
-            modelBuilder.Entity("CategoryTask", b =>
-                {
-                    b.HasOne("KidsApi.Models.Entites.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KidsApi.Models.Entites.Task", null)
-                        .WithMany()
-                        .HasForeignKey("TasksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("KidsApi.Models.Entites.Child", b =>
                 {
                     b.HasOne("KidsApi.Models.Entites.Reward", null)
                         .WithMany("children")
                         .HasForeignKey("RewardId");
+                });
+
+            modelBuilder.Entity("KidsApi.Models.Entites.ParentChildRelationship", b =>
+                {
+                    b.HasOne("KidsApi.Models.Entites.Child", "Child")
+                        .WithMany()
+                        .HasForeignKey("ChildId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KidsApi.Models.Entites.Parent", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Child");
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("KidsApi.Models.Entites.Reward", b =>
@@ -262,7 +274,13 @@ namespace KidsApi.Migrations
 
             modelBuilder.Entity("KidsApi.Models.Entites.Task", b =>
                 {
-                    b.HasOne("KidsApi.Models.Entites.Parent", null)
+                    b.HasOne("KidsApi.Models.Entites.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KidsApi.Models.Entites.Parent", "Parent")
                         .WithMany("Tasks")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -273,6 +291,10 @@ namespace KidsApi.Migrations
                         .HasForeignKey("childId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("KidsApi.Models.Entites.Child", b =>

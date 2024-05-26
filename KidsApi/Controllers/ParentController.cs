@@ -12,7 +12,7 @@ namespace KidsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ParentController: ControllerBase
+    public class ParentController : ControllerBase
     {
 
 
@@ -42,7 +42,7 @@ namespace KidsApi.Controllers
         public IActionResult Registor(SignUpRequest request)
         {
 
-            var newUser = Parent.Create(request.Username, request.Password , request.PhoneNumber,request.Email, request.IsAdmin);
+            var newUser = Parent.Create(request.Username, request.Password, request.PhoneNumber, request.Email, request.IsAdmin);
 
             newUser.Username = request.Username;
             //newUser.Password = request.Password;
@@ -56,10 +56,10 @@ namespace KidsApi.Controllers
 
         }
 
-        [HttpGet("{parentId}/tasks")]
+        [HttpGet("{parentId}/GetTasks")]
         public IActionResult GetTasks(int parentId)
         {
-            var tasks = context.Tasks.Where(t => t.ParentId == parentId).ToList();
+            var tasks = context.Task.Where(t => t.ParentId == parentId).ToList();
             if (tasks.Any())
             {
                 return Ok(tasks);
@@ -77,35 +77,38 @@ namespace KidsApi.Controllers
             {
                 return BadRequest("Invalid category ID.");
             }
+            var parent = context.Parent.Find(request.ParentId);
+            if (parent == null)
+            {
+                return NotFound($"Parent with id {request.ParentId} not found");
+            }
             var newTask = new Models.Entites.Task
             {
-               
                 TaskType = request.TaskType,
                 Description = request.Description,
                 Date = request.Date,
                 Points = request.Points,
                 childId = request.ChildId,
-                CategoryId = category.CategoryId
-
-
+                CategoryId = category.CategoryId,
+                ParentId = request.ParentId,
             };
 
-            context.Tasks.Add(newTask);
-            context.SaveChanges();
+            context.Task.Add(newTask);
+             context.SaveChanges();
 
-            return Ok(new { Message = "Task created", TaskId = newTask.Id });
+            return Ok(new { Message = "Task created" });
         }
 
-        private List<SelectListItem> GetCategories()
-        {
-            var categories = context.Categories.Select(c => new SelectListItem
-            {
-                Value = c.CategoryId.ToString(),
-                Text = c.Name
-            }).ToList();
+        //private List<SelectListItem> GetCategories()
+        //{
+        //    var categories = context.Categories.Select(c => new SelectListItem
+        //    {
+        //        Value = c.CategoryId.ToString(),
+        //        Text = c.Name
+        //    }).ToList();
 
-            return categories;
-        }
+        //    return categories;
+        //}
 
         //[HttpGet("Details/{id}")]
         //[ProducesResponseType(typeof(ChildAccountResponce), 200)]
@@ -130,8 +133,9 @@ namespace KidsApi.Controllers
 
         //    });
         //}
+
         [HttpGet("Details/{id}")]
-        [HttpPatch("Details/{id}")]
+       [HttpPatch("Details/{id}")]
         [ProducesResponseType(typeof(ChildAccountResponce), 200)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<ChildAccountResponce> Details([FromRoute] int id, [FromBody] ChildAccountUpdateRequest request)
@@ -163,25 +167,58 @@ namespace KidsApi.Controllers
                 Points = child.Points,
             });
         }
-        [HttpPost("AddChild")]
-        public IActionResult AddChild(AddChildRequest req)
-        {
-            var newChild = new Child()
-            {
-                Id = req.Id,
-                Username = req.Username,
-                Password = req.Password,
-                SavingsAccountNumber = req.SavingsAccountNumber,
-                Points = req.Points,
-                ParentId = req.ParentId,
+        //[HttpPost("AddChild")]
+        //public IActionResult AddChild(AddChildRequest req)
+        //{
+        //    var newChild = new Child()
+        //    {
+        //        Id = req.Id,
+        //        Username = req.Username,
+        //        Password = req.Password,
+        //        SavingsAccountNumber = req.SavingsAccountNumber,
+        //        Points = req.Points,
+        //        ParentId = req.ParentId,
 
+        //    };
+        //    context.Child.Add(newChild);
+        //    context.SaveChanges();
+
+        //    return CreatedAtAction(nameof(Details), new { Id = newChild.Id }, newChild);
+        //}
+
+        [HttpPost("addchild")]
+        public ActionResult AddChild([FromBody] AddChildRequest request)
+        {
+            // validate request
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // create new child entity
+            var child = new Child
+            {
+                Username = request.Username,
+                Password = request.Password,
+                ParentId = request.ParentId
             };
-            context.Child.Add(newChild);
+
+            // add child to database
+            context.Child.Add(child);
             context.SaveChanges();
 
-            return CreatedAtAction(nameof(Details), new { Id = newChild.Id }, newChild);
-        }
+            // create parent-child relationship
+            var parentChildRelationship = new ParentChildRelationship
+            {
+                ParentId = request.ParentId,
+                ChildId = child.Id
+            };
+            context.ParentChildRelationships.Add(parentChildRelationship);
+            context.SaveChanges();
 
+            return Ok("Child added successfully!");
+        }
+        
         [HttpGet("GetChildren/{parentId}")]
         public IActionResult GetChildren(int parentId)
         {
@@ -197,32 +234,32 @@ namespace KidsApi.Controllers
             return Ok(children);
         }
 
-        [HttpPost("AddReward")]
-        public IActionResult AddReward([FromBody] AddRewardRequest req)
-        {
-            var newReward = new Reward()
-            {
-                Id = req.Id,
-                RequiredPoints = req.RequiredPoints,
-                Description = req.Description,
-                RewardType = req.RewardType,
-                children = new List<Child>()
-            };
+        //[HttpPost("AddReward")]
+        //public IActionResult AddReward([FromBody] AddRewardRequest req)
+        //{
+        //    var newReward = new Reward()
+        //    {
+        //        Id = req.Id,
+        //        RequiredPoints = req.RequiredPoints,
+        //        Description = req.Description,
+        //        RewardType = req.RewardType,
+        //        children = new List<Child>()
+        //    };
 
-            foreach (var childId in req.children)
-            {
-                var child = context.Child.Find(childId);
-                if (child != null)
-                {
-                    newReward.children.Add(child);
-                }
-            }
+        //    foreach (var childId in req.children)
+        //    {
+        //        var child = context.Child.Find(childId);
+        //        if (child != null)
+        //        {
+        //            newReward.children.Add(child);
+        //        }
+        //    }
 
-            context.Rewards.Add(newReward);
-            context.SaveChanges();
+        //    context.Rewards.Add(newReward);
+        //    context.SaveChanges();
 
-            return CreatedAtAction(nameof(Details), new { Id = newReward.Id }, newReward);
-        }
+        //    return CreatedAtAction(nameof(Details), new { Id = newReward.Id }, newReward);
+        //}
 
 
         //[HttpPost("AddReward")]
@@ -260,7 +297,7 @@ namespace KidsApi.Controllers
         [HttpGet("balance")]
         public ActionResult<GetBalanceResponse> GetBalance(int parentId)
         {
-            var parent = context.Parent.FirstOrDefault(p => p.Id == parentId);
+            var parent = context.Parent.FirstOrDefault(p => p.ParentId == parentId);
             if (parent == null)
             {
                 return NotFound();
@@ -274,7 +311,7 @@ namespace KidsApi.Controllers
             return Ok(balanceResponse);
         }
 
-        [HttpGet("children/{childId}/points")]
+        [HttpGet("children/{Id}/points")]
         public ActionResult<decimal> GetChildPoints(int childId)
         {
             var child = context.Child.FirstOrDefault(c => c.Id == childId);
@@ -289,6 +326,43 @@ namespace KidsApi.Controllers
             };
 
             return Ok(pointsResponse);
+        }
+
+
+        //[HttpGet("child/{childId}/taskhistory")]
+        //public ActionResult<List<TaskHistoryResponse>> GetTaskHistory(int childId)
+        //{
+        //    var childTasks = context.Task
+        // .Where(t => t.Id == childId && t.isCompleted)
+        // .ToList();
+
+        //    var taskHistory = childTasks.Select(t => new TaskHistoryResponse
+        //    {
+        //        TaskId = t.Id,
+        //        CategoryName = t.Category.Name,
+        //        Description = t.Description,
+        //        Points = t.Points,
+        //        CompletionDate = t.Date
+        //    }).ToList();
+
+        //    return Ok(taskHistory);
+        //}
+        [HttpGet("child/{childId}/taskhistory")]
+        public ActionResult<List<TaskHistoryResponse>> GetTaskHistory(int childId)
+        {
+            var taskHistory = context.Task
+                .Where(t => t.childId == childId && t.isCompleted)
+                .Select(t => new TaskHistoryResponse
+                {
+                    TaskId = t.Id,
+                    CategoryName = t.Category.Name,
+                    Description = t.Description,
+                    Points = t.Points,
+                    CompletionDate = t.Date
+                })
+                .ToList();
+
+            return Ok(taskHistory);
         }
     }
 }

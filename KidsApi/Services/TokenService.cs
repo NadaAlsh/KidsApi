@@ -91,7 +91,7 @@ namespace KidsApi.Services
             {
 
                 new Claim(TokenClaimsConstant.Username, username),
-                new Claim(TokenClaimsConstant.UserId, userAccount.Id.ToString()),
+                new Claim(TokenClaimsConstant.UserId, userAccount.ParentId.ToString()),
                 new Claim(ClaimTypes.Role, userAccount.IsAdmin ? "Admin" : "User")
 
         };
