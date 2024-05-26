@@ -107,17 +107,52 @@ namespace KidsApi.Controllers
             return categories;
         }
 
+        //[HttpGet("Details/{id}")]
+        //[ProducesResponseType(typeof(ChildAccountResponce), 200)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public ActionResult<ChildAccountResponce> Details([FromRoute] int id)
+        //{
+
+        //    var child = context.Child.Find(id);
+        //    if (child == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(new ChildAccountResponce
+        //    {
+        //        Id = child.Id,
+        //        Username = child.Username,
+        //        Password = child.Password,
+        //        SavingsAccountNumber = child.SavingsAccountNumber,
+        //        BaitiAccountNumber = child.BaitiAccountNumber,
+        //        Points = child.Points,
+
+
+        //    });
+        //}
         [HttpGet("Details/{id}")]
+        [HttpPatch("Details/{id}")]
         [ProducesResponseType(typeof(ChildAccountResponce), 200)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<ChildAccountResponce> Details([FromRoute] int id)
+        public ActionResult<ChildAccountResponce> Details([FromRoute] int id, [FromBody] ChildAccountUpdateRequest request)
         {
-
             var child = context.Child.Find(id);
             if (child == null)
             {
                 return NotFound();
             }
+
+            if (request != null)
+            {
+                // Update editable fields
+                child.Username = request.Username;
+                child.Password = request.Password;
+                child.SavingsAccountNumber = request.SavingsAccountNumber;
+                child.Points = request.Points;
+                child.Balance = request.Balance;
+                context.SaveChanges();
+            }
+
             return Ok(new ChildAccountResponce
             {
                 Id = child.Id,
@@ -126,8 +161,6 @@ namespace KidsApi.Controllers
                 SavingsAccountNumber = child.SavingsAccountNumber,
                 BaitiAccountNumber = child.BaitiAccountNumber,
                 Points = child.Points,
-
-
             });
         }
         [HttpPost("AddChild")]
@@ -163,6 +196,34 @@ namespace KidsApi.Controllers
 
             return Ok(children);
         }
+
+        [HttpPost("AddReward")]
+        public IActionResult AddReward([FromBody] AddRewardRequest req)
+        {
+            var newReward = new Reward()
+            {
+                Id = req.Id,
+                RequiredPoints = req.RequiredPoints,
+                Description = req.Description,
+                RewardType = req.RewardType,
+                children = new List<Child>()
+            };
+
+            foreach (var childId in req.children)
+            {
+                var child = context.Child.Find(childId);
+                if (child != null)
+                {
+                    newReward.children.Add(child);
+                }
+            }
+
+            context.Rewards.Add(newReward);
+            context.SaveChanges();
+
+            return CreatedAtAction(nameof(Details), new { Id = newReward.Id }, newReward);
+        }
+
 
         //[HttpPost("AddReward")]
         //public IActionResult Add(AddRewardRequest req)

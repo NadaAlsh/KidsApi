@@ -66,6 +66,9 @@ namespace KidsApi.Controllers
             return Ok();
         }
 
+       }
+    }
+
 
         [HttpGet("{childId}/balance")]
         public ActionResult<GetBalanceResponse> GetBalance(int childId)
