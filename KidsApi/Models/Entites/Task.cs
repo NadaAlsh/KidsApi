@@ -1,5 +1,4 @@
-﻿using KidsApi.Models.Entites;
-
+﻿
 namespace KidsApi.Models.Entites
 {
     public class Task
@@ -11,9 +10,12 @@ namespace KidsApi.Models.Entites
         public DateOnly Date { get; set; }
         public int Points { get; set; }
         public int childId { get; set;}
-        public List<Category> Category { get; set; }
+        //public List<Category> Category { get; set; }
+        public Category Category { get; set; }
         public int CategoryId { get;  set; }
         public bool isCompleted { get; set;}
+
+        public Parent Parent { get; set; }
     }
 
     public class completedTask

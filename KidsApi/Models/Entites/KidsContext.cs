@@ -12,10 +12,10 @@ namespace KidsApi.Models.Entites
 
         public DbSet<Parent> Parent { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public ICollection<Task> Tasks { get; set; } = new List<Task>();
+        public DbSet<Task> Task { get; set; } 
         public ICollection<Child> Children { get; set; }
         public ICollection<Reward> Rewards { get; set; } = new List<Reward>();
-
+        public DbSet<ParentChildRelationship> ParentChildRelationships { get; set; }
         public KidsContext(DbContextOptions<KidsContext> options) : base(options)
         {
           
@@ -24,6 +24,30 @@ namespace KidsApi.Models.Entites
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ParentChildRelationship>()
+               .HasKey(pc => new { pc.ParentId, pc.ChildId });
+
+            //modelBuilder.Entity<ParentChildRelationship>()
+            //    .HasOne(pc => pc.Parent)
+            //    .WithMany(p => p.chilren)
+            //    .HasForeignKey(pc => pc.ParentId);
+
+            //modelBuilder.Entity<ParentChildRelationship>()
+            //    .HasOne(pc => pc.Child)
+            //    .WithOne(c => c.Parent)
+            //    .HasForeignKey(pc => pc.ChildId);
+
+         
+            //modelBuilder.Entity<Task>()
+            //    .HasOne(t => t.Child)
+            //    .WithMany(c => c.Tasks)
+            //    .HasForeignKey(t => t.ChildId);
+
+           // modelBuilder.Entity<Task>()
+           //.HasOne(t => t.Category)
+           //.WithMany(c => c.Tasks)
+           //.HasForeignKey(t => t.CategoryId);
+
             modelBuilder.Entity<Category>().HasData(new Category { CategoryId = 1, Name = "Clean" },
                 new Category { CategoryId = 2, Name = "Play" },
                 new Category { CategoryId = 3, Name = "Outdoor Activity" },

@@ -16,10 +16,18 @@ namespace KidsApi.Models.Entites
         public decimal Balance { get; set; }
 
         public ICollection<Task> Tasks { get; set; } = new List<Task>();
-  
-      //  public List<Request> Requests { get; set; }
 
+        //  public List<Request> Requests { get; set; }
 
+        public static Child Create(string username, string password)
+        {
+            return new Child
+            {
+                Username = username,
+                Password = BCrypt.Net.BCrypt.EnhancedHashPassword(password),
+               
+            };
+        }
 
     }
 }
