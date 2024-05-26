@@ -13,8 +13,7 @@ namespace KidsApi.Models.Entites
         public DbSet<Parent> Parent { get; set; }
         public DbSet<Category> Categories { get; set; }
         public ICollection<Task> Tasks { get; set; } = new List<Task>();
-        
-
+        public ICollection<Child> Children { get; set; }
         public ICollection<Reward> Rewards { get; set; } = new List<Reward>();
 
         public KidsContext(DbContextOptions<KidsContext> options) : base(options)

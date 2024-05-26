@@ -13,6 +13,7 @@ namespace KidsApi.Models.Entites
         public int Points { get; set; }
         public int BaitiAccountNumber { get; set; }
         public int SavingsAccountNumber { get; set; }
+        public decimal Balance { get; set; }
 
         public ICollection<Task> Tasks { get; set; } = new List<Task>();
   
