@@ -1,7 +1,7 @@
 ﻿
 namespace KidsApi.Models.Entites
 {
-    public class Task
+    public class MyTask
     {
         public int Id { get; set; }
         public int ParentId { get; set; }

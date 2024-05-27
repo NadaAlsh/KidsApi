@@ -82,7 +82,7 @@ namespace KidsApi.Controllers
             {
                 return NotFound($"Parent with id {request.ParentId} not found");
             }
-            var newTask = new Models.Entites.Task
+            var newTask = new Models.Entites.MyTask
             {
                 TaskType = request.TaskType,
                 Description = request.Description,
@@ -108,30 +108,6 @@ namespace KidsApi.Controllers
         //    }).ToList();
 
         //    return categories;
-        //}
-
-        //[HttpGet("Details/{id}")]
-        //[ProducesResponseType(typeof(ChildAccountResponce), 200)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //public ActionResult<ChildAccountResponce> Details([FromRoute] int id)
-        //{
-
-        //    var child = context.Child.Find(id);
-        //    if (child == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(new ChildAccountResponce
-        //    {
-        //        Id = child.Id,
-        //        Username = child.Username,
-        //        Password = child.Password,
-        //        SavingsAccountNumber = child.SavingsAccountNumber,
-        //        BaitiAccountNumber = child.BaitiAccountNumber,
-        //        Points = child.Points,
-
-
-        //    });
         //}
 
         [HttpGet("Details/{id}")]
@@ -261,7 +237,27 @@ namespace KidsApi.Controllers
         //    return CreatedAtAction(nameof(Details), new { Id = newReward.Id }, newReward);
         //}
 
+        //[HttpPost("AddReward")]
+        //public IActionResult AddReward([FromBody] AddRewardRequest req)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
+        //    var newReward = new Reward
+        //    {
+        //        RequiredPoints = req.RequiredPoints,
+        //        Description = req.Description,
+        //        RewardType = req.RewardType,
+        //        Children = req.children.Select(childId => context.Child.Find(childId)).Where(child => child != null).ToList()
+        //    };
+
+        //    context.Rewards.Add(newReward);
+        //    context.SaveChanges();
+
+        //    return CreatedAtAction(nameof(Details), new { Id = newReward.Id }, newReward);
+        //}
         //[HttpPost("AddReward")]
         //public IActionResult Add(AddRewardRequest req)
         //{
@@ -347,6 +343,60 @@ namespace KidsApi.Controllers
 
         //    return Ok(taskHistory);
         //}
+
+
+        [HttpPost("{parentId}/Addrewards")]
+        public IActionResult AddReward(int parentId, [FromBody] AddRewardRequest request)
+        {
+            var parent = context.Parent.Include(p => p.Rewards).Include(p => p.children).FirstOrDefault(p => p.ParentId == parentId);
+
+            if (parent == null)
+            {
+                return NotFound();
+            }
+
+            var reward = new Reward
+            {
+                ParentId = parentId,
+                RewardType = request.RewardType,
+                Description = request.Description,
+                RequiredPoints = request.RequiredPoints,
+            };
+
+            foreach (var childId in request.ChildIds)
+            {
+                var child = parent.children.FirstOrDefault(c => c.Id == childId);
+                if (child != null)
+                {
+                    reward.Children.Add(child);
+                }
+            }
+
+            context.Rewards.Add(reward);
+            context.SaveChanges();
+
+            return CreatedAtAction(nameof(AddReward), new { parentId = parentId, rewardId = reward.Id }, reward);
+        }
+
+
+        [HttpGet("child/{childId}/claimedrewards")]
+        public ActionResult<List<ClaimedRewardResponce>> GetClaimedRewards(int childId)
+        {
+            var claimedRewards = context.ClaimedRewards
+                .Where(cr => cr.ChildId == childId)
+                .Select(cr => new ClaimedRewardResponce
+                {
+                    RewardId = cr.RewardId,
+                    ClaimDate = cr.claimDate,
+                    // Add any other properties you want to include in the response
+                })
+                .ToList();
+
+            return Ok(claimedRewards);
+        }
+
+    
+
         [HttpGet("child/{childId}/taskhistory")]
         public ActionResult<List<TaskHistoryResponse>> GetTaskHistory(int childId)
         {
@@ -355,7 +405,7 @@ namespace KidsApi.Controllers
                 .Select(t => new TaskHistoryResponse
                 {
                     TaskId = t.Id,
-                    CategoryName = t.Category.Name,
+                   // CategoryName= t.Category.Name,
                     Description = t.Description,
                     Points = t.Points,
                     CompletionDate = t.Date

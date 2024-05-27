@@ -7,7 +7,7 @@
         public string RewardType { get; set; }
         public string Description { get; set; }
         public int RequiredPoints { get; set; }
-        public List<Child> children { get; set; }
+        public List<Child> Children { get; set; }
     }
 
     public class ClaimedRewards
