@@ -9,6 +9,7 @@
         public string PhoneNumber { get; set; }
         public bool IsAdmin { get; set; }
         public List<Child> children { get; set; }
+        public ICollection<ParentChildRelationship> ParentChildRelationships { get; set; }
 
 
         public ICollection<MyTask> Tasks { get; set; } = new List<MyTask>();

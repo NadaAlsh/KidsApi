@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KidsApi.Migrations
 {
     /// <inheritdoc />
-    public partial class testing : Migration
+    public partial class Nada2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -128,14 +128,12 @@ namespace KidsApi.Migrations
                         name: "FK_ParentChildRelationships_Child_ChildId",
                         column: x => x.ChildId,
                         principalTable: "Child",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ParentChildRelationships_Parent_ParentId",
                         column: x => x.ParentId,
                         principalTable: "Parent",
-                        principalColumn: "ParentId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ParentId");
                 });
 
             migrationBuilder.CreateTable(
@@ -172,8 +170,7 @@ namespace KidsApi.Migrations
                         name: "FK_Task_Parent_ParentId",
                         column: x => x.ParentId,
                         principalTable: "Parent",
-                        principalColumn: "ParentId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ParentId");
                 });
 
             migrationBuilder.InsertData(
