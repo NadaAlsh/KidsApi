@@ -169,6 +169,42 @@ namespace KidsApi.Controllers
             return Ok(pointsResponse);
         }
 
+
+        [HttpPost("{parentId}/transfer/{childId}")]
+        public IActionResult TransferPointsToMoney(int parentId, int childId, TransferRequest request)
+        {
+            var parent = _context.Parent
+                .Include(p => p.ParentChildRelationships)
+                .ThenInclude(pcr => pcr.Child)
+                .FirstOrDefault(p => p.ParentId == parentId);
+
+            if (parent == null)
+            {
+                return NotFound();
+            }
+
+            var child = parent.ParentChildRelationships
+                .Select(pcr => pcr.Child)
+                .FirstOrDefault(c => c.Id == childId);
+
+            if (child == null)
+            {
+                return NotFound();
+            }
+
+            if (child.Points < request.PointsToTransfer)
+            {
+                return BadRequest("Insufficient points");
+            }
+
+            child.Points -= request.PointsToTransfer;
+            parent.Balance += request.PointsToTransfer * 0.1M; // assuming 1 point = $0.10
+            _context.SaveChanges();
+
+            return Ok(new { Message = "Transfer successful." });
+        }
+
+
         //[HttpPut("AddPoints/{childId}")]
         //public IActionResult AddPoints(int childId, AddPointsRequest request)
         //{
