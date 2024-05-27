@@ -345,10 +345,10 @@ namespace KidsApi.Controllers
         //}
 
 
-        [HttpPost("{parentId}/Addrewards")]
-        public IActionResult AddReward(int parentId, [FromBody] AddRewardRequest request)
+        [HttpPost("Addrewards")]
+        public IActionResult AddReward(AddRewardRequest request)
         {
-            var parent = context.Parent.Include(p => p.Rewards).Include(p => p.children).FirstOrDefault(p => p.ParentId == parentId);
+            var parent = context.Parent.Include(p => p.Rewards).Include(p => p.children);
 
             if (parent == null)
             {
@@ -357,25 +357,20 @@ namespace KidsApi.Controllers
 
             var reward = new Reward
             {
-                ParentId = parentId,
                 RewardType = request.RewardType,
                 Description = request.Description,
                 RequiredPoints = request.RequiredPoints,
+                ChildId = request.ChildId,
+
             };
 
-            foreach (var childId in request.ChildIds)
-            {
-                var child = parent.children.FirstOrDefault(c => c.Id == childId);
-                if (child != null)
-                {
-                    reward.Children.Add(child);
-                }
-            }
+           
+            
 
             context.Rewards.Add(reward);
             context.SaveChanges();
 
-            return CreatedAtAction(nameof(AddReward), new { parentId = parentId, rewardId = reward.Id }, reward);
+            return CreatedAtAction(nameof(AddReward), new { rewardId = reward.Id }, reward);
         }
 
 

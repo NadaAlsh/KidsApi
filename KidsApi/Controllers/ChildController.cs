@@ -61,7 +61,7 @@ namespace KidsApi.Controllers
             return Ok(new
             {
                 ChildId = child.Id,
-                
+            
             });
         }
 

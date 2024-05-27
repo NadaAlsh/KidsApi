@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KidsApi.Migrations
 {
     [DbContext(typeof(KidsContext))]
-    [Migration("20240526084150_Awdhah")]
-    partial class Awdhah
+    [Migration("20240527065428_testing")]
+    partial class testing
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,94 +108,36 @@ namespace KidsApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ParentId");
+
                     b.HasIndex("RewardId");
 
                     b.ToTable("Child");
                 });
 
-            modelBuilder.Entity("KidsApi.Models.Entites.Parent", b =>
+            modelBuilder.Entity("KidsApi.Models.Entites.ClaimedRewards", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Parent");
-                });
-
-            modelBuilder.Entity("KidsApi.Models.Entites.ParentChildRelationship", b =>
-                {
-                    b.Property<int>("ParentId")
-                        .HasColumnType("int");
 
                     b.Property<int>("ChildId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ParentChildRelationshipId")
+                    b.Property<int>("RewardId")
                         .HasColumnType("int");
 
-                    b.HasKey("ParentId", "ChildId");
-
-                    b.HasIndex("ChildId");
-
-                    b.ToTable("ParentChildRelationships");
-                });
-
-            modelBuilder.Entity("KidsApi.Models.Entites.Reward", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ParentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RequiredPoints")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RewardType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateOnly>("claimDate")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("Reward");
+                    b.ToTable("ClaimedRewards");
                 });
 
-            modelBuilder.Entity("KidsApi.Models.Entites.Task", b =>
+            modelBuilder.Entity("KidsApi.Models.Entites.MyTask", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -237,14 +179,130 @@ namespace KidsApi.Migrations
 
                     b.HasIndex("childId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Task");
+                });
+
+            modelBuilder.Entity("KidsApi.Models.Entites.Parent", b =>
+                {
+                    b.Property<int>("ParentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ParentId"));
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ParentId");
+
+                    b.ToTable("Parent");
+                });
+
+            modelBuilder.Entity("KidsApi.Models.Entites.ParentChildRelationship", b =>
+                {
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParentChildRelationshipId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ParentId", "ChildId");
+
+                    b.HasIndex("ChildId");
+
+                    b.ToTable("ParentChildRelationships");
+                });
+
+            modelBuilder.Entity("KidsApi.Models.Entites.Reward", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequiredPoints")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RewardType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Rewards");
                 });
 
             modelBuilder.Entity("KidsApi.Models.Entites.Child", b =>
                 {
-                    b.HasOne("KidsApi.Models.Entites.Reward", null)
+                    b.HasOne("KidsApi.Models.Entites.Parent", null)
                         .WithMany("children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KidsApi.Models.Entites.Reward", null)
+                        .WithMany("Children")
                         .HasForeignKey("RewardId");
+                });
+
+            modelBuilder.Entity("KidsApi.Models.Entites.MyTask", b =>
+                {
+                    b.HasOne("KidsApi.Models.Entites.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KidsApi.Models.Entites.Parent", "Parent")
+                        .WithMany("Tasks")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KidsApi.Models.Entites.Child", null)
+                        .WithMany("Tasks")
+                        .HasForeignKey("childId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("KidsApi.Models.Entites.ParentChildRelationship", b =>
@@ -270,32 +328,7 @@ namespace KidsApi.Migrations
                 {
                     b.HasOne("KidsApi.Models.Entites.Parent", null)
                         .WithMany("Rewards")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("KidsApi.Models.Entites.Task", b =>
-                {
-                    b.HasOne("KidsApi.Models.Entites.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KidsApi.Models.Entites.Parent", null)
-                        .WithMany("Tasks")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KidsApi.Models.Entites.Child", null)
-                        .WithMany("Tasks")
-                        .HasForeignKey("childId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
+                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("KidsApi.Models.Entites.Child", b =>
@@ -308,11 +341,13 @@ namespace KidsApi.Migrations
                     b.Navigation("Rewards");
 
                     b.Navigation("Tasks");
+
+                    b.Navigation("children");
                 });
 
             modelBuilder.Entity("KidsApi.Models.Entites.Reward", b =>
                 {
-                    b.Navigation("children");
+                    b.Navigation("Children");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KidsApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Awdhah : Migration
+    public partial class testing : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,10 +27,25 @@ namespace KidsApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Parent",
+                name: "ClaimedRewards",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RewardId = table.Column<int>(type: "int", nullable: false),
+                    ChildId = table.Column<int>(type: "int", nullable: false),
+                    claimDate = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClaimedRewards", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Parent",
+                columns: table => new
+                {
+                    ParentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -41,29 +56,29 @@ namespace KidsApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Parent", x => x.Id);
+                    table.PrimaryKey("PK_Parent", x => x.ParentId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reward",
+                name: "Rewards",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ParentId = table.Column<int>(type: "int", nullable: false),
                     RewardType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RequiredPoints = table.Column<int>(type: "int", nullable: false)
+                    RequiredPoints = table.Column<int>(type: "int", nullable: false),
+                    ChildId = table.Column<int>(type: "int", nullable: false),
+                    ParentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reward", x => x.Id);
+                    table.PrimaryKey("PK_Rewards", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reward_Parent_ParentId",
+                        name: "FK_Rewards_Parent_ParentId",
                         column: x => x.ParentId,
                         principalTable: "Parent",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ParentId");
                 });
 
             migrationBuilder.CreateTable(
@@ -86,9 +101,15 @@ namespace KidsApi.Migrations
                 {
                     table.PrimaryKey("PK_Child", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Child_Reward_RewardId",
+                        name: "FK_Child_Parent_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Parent",
+                        principalColumn: "ParentId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Child_Rewards_RewardId",
                         column: x => x.RewardId,
-                        principalTable: "Reward",
+                        principalTable: "Rewards",
                         principalColumn: "Id");
                 });
 
@@ -113,12 +134,12 @@ namespace KidsApi.Migrations
                         name: "FK_ParentChildRelationships_Parent_ParentId",
                         column: x => x.ParentId,
                         principalTable: "Parent",
-                        principalColumn: "Id",
+                        principalColumn: "ParentId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tasks",
+                name: "Task",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -134,24 +155,24 @@ namespace KidsApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tasks", x => x.Id);
+                    table.PrimaryKey("PK_Task", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tasks_Categories_CategoryId",
+                        name: "FK_Task_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Tasks_Child_childId",
+                        name: "FK_Task_Child_childId",
                         column: x => x.childId,
                         principalTable: "Child",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Tasks_Parent_ParentId",
+                        name: "FK_Task_Parent_ParentId",
                         column: x => x.ParentId,
                         principalTable: "Parent",
-                        principalColumn: "Id",
+                        principalColumn: "ParentId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -168,6 +189,11 @@ namespace KidsApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Child_ParentId",
+                table: "Child",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Child_RewardId",
                 table: "Child",
                 column: "RewardId");
@@ -178,23 +204,23 @@ namespace KidsApi.Migrations
                 column: "ChildId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reward_ParentId",
-                table: "Reward",
+                name: "IX_Rewards_ParentId",
+                table: "Rewards",
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_CategoryId",
-                table: "Tasks",
+                name: "IX_Task_CategoryId",
+                table: "Task",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_childId",
-                table: "Tasks",
+                name: "IX_Task_childId",
+                table: "Task",
                 column: "childId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_ParentId",
-                table: "Tasks",
+                name: "IX_Task_ParentId",
+                table: "Task",
                 column: "ParentId");
         }
 
@@ -202,10 +228,13 @@ namespace KidsApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ClaimedRewards");
+
+            migrationBuilder.DropTable(
                 name: "ParentChildRelationships");
 
             migrationBuilder.DropTable(
-                name: "Tasks");
+                name: "Task");
 
             migrationBuilder.DropTable(
                 name: "Categories");
@@ -214,7 +243,7 @@ namespace KidsApi.Migrations
                 name: "Child");
 
             migrationBuilder.DropTable(
-                name: "Reward");
+                name: "Rewards");
 
             migrationBuilder.DropTable(
                 name: "Parent");
