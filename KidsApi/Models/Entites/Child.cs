@@ -15,6 +15,8 @@ namespace KidsApi.Models.Entites
         public int SavingsAccountNumber { get; set; }
         public decimal Balance { get; set; }
 
+        public ICollection<ParentChildRelationship> ParentChildRelationships { get; set; }
+
         public ICollection<MyTask> Tasks { get; set; } = new List<MyTask>();
   
       //  public List<Request> Requests { get; set; }

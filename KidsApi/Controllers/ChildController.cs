@@ -79,6 +79,14 @@ namespace KidsApi.Controllers
             return Ok(tasks);
         }
 
+
+        [HttpGet("{Id}/GetRewards")]
+        public IActionResult GetRewards(int parentId)
+        {
+            var rewards = _context.Rewards.Where(t => t.Id == parentId).ToList();
+            return Ok(rewards);
+        }
+
         //[HttpPut("{childId}/tasks/{taskId}/complete")]
         //public IActionResult CompleteTask(int childId, int taskId)
         //{

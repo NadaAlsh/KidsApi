@@ -288,7 +288,7 @@ namespace KidsApi.Migrations
                     b.HasOne("KidsApi.Models.Entites.Parent", "Parent")
                         .WithMany("Tasks")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("KidsApi.Models.Entites.Child", null)
@@ -305,15 +305,15 @@ namespace KidsApi.Migrations
             modelBuilder.Entity("KidsApi.Models.Entites.ParentChildRelationship", b =>
                 {
                     b.HasOne("KidsApi.Models.Entites.Child", "Child")
-                        .WithMany()
+                        .WithMany("ParentChildRelationships")
                         .HasForeignKey("ChildId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("KidsApi.Models.Entites.Parent", "Parent")
-                        .WithMany()
+                        .WithMany("ParentChildRelationships")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Child");
@@ -330,11 +330,15 @@ namespace KidsApi.Migrations
 
             modelBuilder.Entity("KidsApi.Models.Entites.Child", b =>
                 {
+                    b.Navigation("ParentChildRelationships");
+
                     b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("KidsApi.Models.Entites.Parent", b =>
                 {
+                    b.Navigation("ParentChildRelationships");
+
                     b.Navigation("Rewards");
 
                     b.Navigation("Tasks");

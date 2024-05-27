@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace KidsApi.Models.Entites
 {
     public class MyTask
@@ -15,6 +17,7 @@ namespace KidsApi.Models.Entites
         public int CategoryId { get;  set; }
         public bool isCompleted { get; set;}
 
+        [ForeignKey("ParentId")]
         public Parent Parent { get; set; }
     }
 

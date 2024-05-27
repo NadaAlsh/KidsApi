@@ -27,7 +27,25 @@ namespace KidsApi.Models.Entites
         {
             modelBuilder.Entity<ParentChildRelationship>()
                .HasKey(pc => new { pc.ParentId, pc.ChildId });
+            modelBuilder.Entity<ParentChildRelationship>()
+            .HasOne(p => p.Parent)
+            .WithMany(p => p.ParentChildRelationships)
+            .HasForeignKey(p => p.ParentId)
+            .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<ParentChildRelationship>()
+                .HasOne(c => c.Child)
+                .WithMany(c => c.ParentChildRelationships)
+                .HasForeignKey(c => c.ChildId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+
+
+            modelBuilder.Entity<MyTask>()
+          .HasOne(t => t.Parent)
+          .WithMany(p => p.Tasks)
+          .HasForeignKey(t => t.ParentId)
+          .OnDelete(DeleteBehavior.NoAction);
             //modelBuilder.Entity<ParentChildRelationship>()
             //    .HasOne(pc => pc.Parent)
             //    .WithMany(p => p.chilren)
@@ -38,16 +56,16 @@ namespace KidsApi.Models.Entites
             //    .WithOne(c => c.Parent)
             //    .HasForeignKey(pc => pc.ChildId);
 
-         
+
             //modelBuilder.Entity<Task>()
             //    .HasOne(t => t.Child)
             //    .WithMany(c => c.Tasks)
             //    .HasForeignKey(t => t.ChildId);
 
-           // modelBuilder.Entity<Task>()
-           //.HasOne(t => t.Category)
-           //.WithMany(c => c.Tasks)
-           //.HasForeignKey(t => t.CategoryId);
+            // modelBuilder.Entity<Task>()
+            //.HasOne(t => t.Category)
+            //.WithMany(c => c.Tasks)
+            //.HasForeignKey(t => t.CategoryId);
 
             modelBuilder.Entity<Category>().HasData(new Category { CategoryId = 1, Name = "Clean" },
                 new Category { CategoryId = 2, Name = "Play" },
