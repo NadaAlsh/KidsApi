@@ -12,10 +12,11 @@ namespace KidsApi.Models.Entites
 
         public DbSet<Parent> Parent { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Task> Task { get; set; } 
+        public DbSet<MyTask> Task { get; set; } 
         public ICollection<Child> Children { get; set; }
         public ICollection<Reward> Rewards { get; set; } = new List<Reward>();
         public DbSet<ParentChildRelationship> ParentChildRelationships { get; set; }
+        public DbSet<ClaimedRewards> ClaimedRewards { get; set; }
         public KidsContext(DbContextOptions<KidsContext> options) : base(options)
         {
           
