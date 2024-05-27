@@ -5,6 +5,7 @@ using KidsApi.Services;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace KidsApi.Controllers
 {
@@ -14,11 +15,13 @@ namespace KidsApi.Controllers
     {
         private readonly TokenService _service;
         private readonly KidsContext _context;
+        private readonly IConfiguration _configuration;
 
-        public ChildController(TokenService service, KidsContext context)
+        public ChildController(TokenService service, KidsContext context, IConfiguration configuration)
         {
             _service = service;
             _context = context;
+            _configuration = configuration;
         }
         //[HttpPost("Login")]
         //public IActionResult ChildLogin(ChildLoginRequest request)
@@ -35,9 +38,68 @@ namespace KidsApi.Controllers
         //    }
 
 
-
         //}
 
+        //[HttpPost("login")]
+        //public ActionResult Login([FromBody] ChildLoginRequest request)
+        //{
+        //    // validate request
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    // find child entity by username and password
+        //    var child = _context.Child
+        //        .Where(c => c.Username == request.Username && c.Password == request.Password)
+        //        .FirstOrDefault();
+
+        //    if (child == null)
+        //    {
+        //        return Unauthorized("Invalid username or password");
+        //    }
+
+        //    // return child's details
+        //    return Ok(new
+        //    {
+        //        ChildId = child.Id,
+
+        //    });
+        ////}
+        //[HttpPost("login")]
+        //public ActionResult Login([FromBody] ChildLoginRequest request)
+        //{
+        //    // Validate request
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    // Find child entity by username and password
+        //    var child = _context.Child
+        //        .Where(c => c.Username == request.Username && c.Password == request.Password)
+        //        .FirstOrDefault();
+
+        //    if (child == null)
+        //    {
+        //        return Unauthorized("Invalid username or password");
+        //    }
+
+        //    // Generate token for the child
+        //    var tokenService = new TokenService(_configuration , _context);
+        //    var tokenResponse = tokenService.ChildGenerateToken(child.Username, child.Password);
+
+        //    if (!tokenResponse.IsValid)
+        //    {
+        //        return BadRequest("Failed to generate token");
+        //    }
+
+        //    // Return child's details along with their tasks
+        //    return Ok(new ChildLoginResponse
+        //    {
+        //        Token = tokenResponse.Token
+        //    });
+        //}
         [HttpPost("login")]
         public ActionResult Login([FromBody] ChildLoginRequest request)
         {
@@ -51,17 +113,20 @@ namespace KidsApi.Controllers
             var child = _context.Child
                 .Where(c => c.Username == request.Username && c.Password == request.Password)
                 .FirstOrDefault();
-
+            var response = _service.ChildGenerateToken(request.Username, request.Password);
             if (child == null)
             {
                 return Unauthorized("Invalid username or password");
             }
-
-            // return child's details
-            return Ok(new
-            {
-                ChildId = child.Id,
             
+
+
+            // return child's details along with their tasks
+            return Ok(new ChildLoginResponse
+            {
+
+                Token = response.Token
+
             });
         }
 
@@ -72,13 +137,28 @@ namespace KidsApi.Controllers
         }
 
 
-        [HttpGet("{Id}/GetTasks")]
-        public IActionResult GetTasks(int parentId)
+        //[HttpGet("{Id}/GetTasks")]
+        //public IActionResult GetTasks(int parentId)
+        //{
+        //    var tasks = _context.Task.Where(t => t.ParentId == parentId).ToList();
+        //    return Ok(tasks);
+        //}
+        [HttpGet("{childId}/GetTasks")]
+        public IActionResult GetTasks(int childId)
         {
-            var tasks = _context.Task.Where(t => t.ParentId == parentId).ToList();
+            // Find child entity by ID
+            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
+
+            if (child == null)
+            {
+                return NotFound("Child not found");
+            }
+
+            // Find tasks associated with the child
+            var tasks = _context.Task.Where(t => t.ParentId == child.ParentId && t.Id == childId).ToList();
+
             return Ok(tasks);
         }
-
 
         [HttpGet("{Id}/GetRewards")]
         public IActionResult GetRewards(int parentId)
