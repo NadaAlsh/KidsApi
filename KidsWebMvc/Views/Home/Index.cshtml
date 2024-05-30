@@ -1,4 +1,4 @@
-﻿@{
+﻿@* @{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,3 +6,43 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+ *@
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Home | Baiti Future Funders</title>
+    <link type="image/x-icon" rel="shortcut icon" href="https://baiti-future-funders.odoo.com/web/image/website/1/favicon?unique=3c6591d">
+    <script id="web.layout.odooscript" type="text/javascript">
+        var odoo = {
+            csrf_token: "b187aeb26f33180b0cf59f2f437030734501bc4ao1748594343",
+            debug: "",
+        };
+    </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="theme-color" content="#714B67">
+    <link rel="manifest" href="/web/manifest.webmanifest" crossorigin="use-credentials">
+    <link rel="apple-touch-icon" href="/web/static/img/odoo-icon-ios.png">
+    <script type="text/javascript">
+        // Block to avoid leaking variables in the script scope
+        {
+            odoo.__session_info__ = {"uid": 2, "is_system": true, "is_admin": true, "is_internal_user": true, "user_context": {"lang": "en_US", "tz": "Asia/Riyadh", "uid": 2}, "db": "baiti-future-funders", "user_settings": {"id": 1, "user_id": {"id": 2}, "is_discuss_sidebar_category_channel_open": true, "is_discuss_sidebar_category_chat_open": true, "push_to_talk_key": false, "use_push_to_talk": false, "voice_active_duration": 200, "homemenu_config": false, "volumes": [["ADD", []]]}, "server_version": "saas~17.2+e", "server_version_info": ["saas~17", 2, 0, "final", 0, "e"], "support_url": "https://www.odoo.com/help", "name": "Nada Alsh", "username": "alshaibaninada@gmail.com", "partner_write_date": "2024-05-30 08:22:51", "partner_display_name": "Nada Alsh", "partner_id": 3, "web.base.url": "https://baiti-future-funders.odoo.com", "active_ids_limit": 20000, "profile_session": null, "profile_collectors": null, "profile_params": null, "max_file_upload_size": 134217728, "home_action_id": false, "cache_hashes": {"translations": "e9c85e9f05ced1ba052f27114d3e45516dbe8ecb", "load_menus": "0a8cda0041a01b55529dbc5d4a352d095e10789afb8a8fc0b6d5509a8e976482"}, "currencies": {"93": {"symbol": " \u062f.\u0643 ", "position": "after", "digits": [69, 3]}, "1": {"symbol": "$", "position": "before", "digits": [69, 2]}}, "bundle_params": {"lang": "en_US"}, "test_mode": false, "user_companies": {"current_company": 1, "allowed_companies": {"1": {"id": 1, "name": "Baiti Future Funders", "sequence": 0, "child_ids": [], "parent_id": false}}, "disallowed_ancestor_companies": {}}, "show_effect": true, "display_switch_company_menu": false, "user_id": [2], "max_time_between_keys_in_ms": 150, "onboarding_to_display": ["website_sale_dashboard", "sale_quotation", "account_dashboard", "account_invoice"], "web_tours": [], "tour_disable": false, "storeData": {"Store": {"action_discuss_id": 119, "hasLinkPreviewFeature": true, "internalUserGroupId": 1, "mt_comment_id": 1, "odoobot": {"id": 2, "name": "OdooBot", "email": "alshaibaninada@gmail.com", "active": false, "im_status": "bot", "is_company": false, "write_date": "2024-05-30 08:22:51", "userId": 1, "isInternalUser": true, "type": "partner"}, "self": {"id": 3, "isAdmin": true, "isInternalUser": true, "name": "Nada Alsh", "notification_preference": "email", "type": "partner", "userId": 2, "write_date": "2024-05-30 08:32:34"}, "settings": {"id": 1, "user_id": {"id": 2}, "is_discuss_sidebar_category_channel_open": true, "is_discuss_sidebar_category_chat_open": true, "push_to_talk_key": false, "use_push_to_talk": false, "voice_active_duration": 200, "homemenu_config": false, "volumes": [["ADD", []]]}, "hasGifPickerFeature": false, "hasMessageTranslationFeature": false}}, "warning": "admin", "expiration_date": "2024-05-31 12:17:33", "expiration_reason": "trial", "map_box_token": false, "odoobot_initialized": true, "iap_company_enrich": false, "odoo_website_url": "https://www.odoo.com", "ocn_token_key": false, "fcm_project_id": false, "inbox_action": 119, "is_quick_edit_mode_enabled": false};
+            const { user_context,  cache_hashes } = odoo.__session_info__;
+            const lang = new URLSearchParams(document.location.search).get("lang");
+            let menuURL = `/web/webclient/load_menus/${cache_hashes.load_menus}`;
+            if (lang) {
+                user_context.lang = lang;
+                menuURL += `?lang=${lang}`
+            }
+            odoo.reloadMenus = () => fetch(menuURL).then(res => res.json());
+            odoo.loadMenusPromise = odoo.reloadMenus();
+            // Prefetch translations to speedup webclient. This is done in JS because link rel="prefetch"
+            // is not yet supported on safari.
+            fetch(`/web/webclient/translations/${cache_hashes.translations}?lang=${user_context.lang}`);
+        }
+    </script>
+    <link type="text/css" rel="stylesheet" href="/web/assets/1/bcca2dd/web.assets_web.min.css">
+    <script type="text/javascript" src="/web/assets/1/8a54f57/web.assets_web.min.js" onerror="__odooAssetError=1"></script>
+
+</head>

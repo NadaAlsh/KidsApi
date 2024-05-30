@@ -12,7 +12,7 @@ namespace KidsApi.Models.Entites
         public bool isCompleted { get; set; }
         public int Points { get; set; }
         public int BaitiAccountNumber { get; set; }
-        public int SavingsAccountNumber { get; set; }
+        public int SavingsAccountNumber { get; set; }//savings
         public decimal Balance { get; set; }
 
         public ICollection<ParentChildRelationship> ParentChildRelationships { get; set; }
