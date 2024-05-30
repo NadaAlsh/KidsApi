@@ -4,6 +4,8 @@ using System.Text;
 using KidsApi.Models.Entites;
 using KidsApi.Models.Requests;
 using KidsApi.Models.Responses;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace KidsWebMvc.API
 {
@@ -41,11 +43,32 @@ namespace KidsWebMvc.API
             }
             return "";
         }
+        public async Task<string> ChildLogin(string username, string password)
+        {
+            var response = await _api.PostAsJsonAsync("/api/login",
+                new ChildLoginRequest { Username = username, Password = password });
+
+            if (response.IsSuccessStatusCode)
+            {
+                var tokenResponse = await response.Content.ReadFromJsonAsync<ChildLoginResponse>();
+
+                var token = tokenResponse.Token;
+                return token;
+            }
+            return "";
+        }
 
         public async Task<IEnumerable<Child>> GetChildren(int parentId)
         {
             var response = await _api
                 .GetFromJsonAsync<IEnumerable<Child>>($"api/parent/GetChildren/{parentId}");
+            return response;
+        }
+
+        public async Task<IEnumerable<MyTask>> GetTasks(int childId)
+        {
+            var response = await _api
+                .GetFromJsonAsync<IEnumerable<MyTask>>($"api/child/GetTasks/{childId}");
             return response;
         }
 
@@ -63,6 +86,14 @@ namespace KidsWebMvc.API
 
             var newReward = await response.Content.ReadFromJsonAsync<Reward>();
             return newReward;
+        }
+        public async Task<List<Reward>> GetRewards(int parentId)
+        {
+            var response = await _api.GetAsync("api/child/{Id}/GetRewards");
+            response.EnsureSuccessStatusCode();
+
+            var rewards = await response.Content.ReadFromJsonAsync<List<Reward>>();
+            return rewards;
         }
         public async Task<List<Reward>> GetAllRewards()
         {
@@ -82,6 +113,62 @@ namespace KidsWebMvc.API
 
             var newChild = await response.Content.ReadFromJsonAsync<Child>();
             return newChild;
+        }
+
+        public async Task<IActionResult> CompleteTask(int childId, int taskId)
+        {
+            var apiUrl = $"api/{childId}/tasks/{taskId}/complete";
+            var response = await _api.PutAsync(apiUrl, null);
+            response.EnsureSuccessStatusCode();
+
+            return new OkObjectResult(new { Message = "Points added successfully and task completed." });
+        }
+
+        public async Task<List<GetBalanceResponse>> GetBalance(int childId)
+        {
+            var response = await _api.GetAsync("api/child/GetBalance");
+            response.EnsureSuccessStatusCode();
+
+            var rewards = await response.Content.ReadFromJsonAsync<List<GetBalanceResponse>>();
+            return rewards;
+        }
+
+        public async Task<List<GetBalanceResponse>> GetChildBalance(int parentId)
+        {
+            var response = await _api.GetAsync("api/parent/balance");
+            response.EnsureSuccessStatusCode();
+
+            var rewards = await response.Content.ReadFromJsonAsync<List<GetBalanceResponse>>();
+            return rewards;
+        }
+
+        public async Task<List<PointsResponse>> GetPoints(int childId)
+        {
+            var response = await _api.GetAsync("api/child/GetPoints/{childId}");
+            response.EnsureSuccessStatusCode();
+
+            var rewards = await response.Content.ReadFromJsonAsync<List<PointsResponse>>();
+            return rewards;
+        }
+
+
+        public async Task<List<PointsResponse>> GetChildPoints(int childId)
+        {
+            var response = await _api.GetAsync("api/parent/children/{childId}/points");
+            response.EnsureSuccessStatusCode();
+
+            var rewards = await response.Content.ReadFromJsonAsync<List<PointsResponse>>();
+            return rewards;
+        }
+
+        public async Task<Transfer> TransferPointsToMoney(int parentId, int childId, TransferRequest request)
+        {
+            var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+            var response = await _api.PostAsync("api/child/{parentId}/transfer/{childId}", content);
+            response.EnsureSuccessStatusCode();
+
+            var newTransfer = await response.Content.ReadFromJsonAsync<Transfer>();
+            return newTransfer;
         }
     }
 }

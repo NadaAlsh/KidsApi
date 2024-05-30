@@ -118,9 +118,7 @@ namespace KidsApi.Controllers
             {
                 return Unauthorized("Invalid username or password");
             }
-            
-
-
+           
             // return child's details along with their tasks
             return Ok(new ChildLoginResponse
             {

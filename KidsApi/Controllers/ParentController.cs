@@ -307,7 +307,7 @@ namespace KidsApi.Controllers
             return Ok(balanceResponse);
         }
 
-        [HttpGet("children/{Id}/points")]
+        [HttpGet("children/{childId}/points")]
         public ActionResult<decimal> GetChildPoints(int childId)
         {
             var child = context.Child.FirstOrDefault(c => c.Id == childId);
