@@ -40,5 +40,9 @@ namespace KidsWebMvc.Controllers
     {
       return View();
     }
+    public IActionResult AddChild()
+    {
+      return View();
+    }
   }
 }

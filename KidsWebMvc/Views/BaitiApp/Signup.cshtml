@@ -1,125 +1,8 @@
-@* 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .container {
-            background-color: #fff;
-            padding: 20px 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        h1 {
-            color: #FFCB7C;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-            .form-group input {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                font-size: 16px;
-            }
-
-                .form-group input:focus {
-                    outline: none;
-                    border-color: #FFCB7C;
-                }
-
-        .btn {
-            background-color: #FFCB7C;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-            .btn:hover {
-                background-color: #FFCB7C;
-            }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-        }
-
-            .navbar a {
-                color: #FFCB7C;
-                text-decoration: none;
-                margin: 0 15px;
-                font-size: 16px;
-            }
-
-            .navbar .profile {
-                background-color: #FFCB7C;
-                color: #fff;
-                padding: 8px 15px;
-                border-radius: 50px;
-            }
-    </style>
-</head>
-<body>
-     <div class="navbar">
-    <div class="logo">LOGO</div>
-    <div>
-    <a href="">Home</a>
-    <a href="">Tasks</a>
-    <a href="#">Requests</a>
-    <a href="#">Rewards</a>
-    <a href="#"></a>
-    </div>
-    <div class="profile">Profile</div>
-    </div> 
-    <div class="container">
-        <h1>Hello Dear Parent! Please Signup</h1>
-        <div class="form-group">
-            <input type="text" placeholder="Name">
-        </div>
-        <div class="form-group">
-            <input type="email" placeholder="Email">
-        </div>
-        <div class="form-group">
-            <input type="password" placeholder="Password">
-        </div>
-        <button class="btn">Signup</button>
-    </div>
-</body>
-</html>
- *@
-
-
+@{
+    Layout = "";
+}
 
 <!DOCTYPE html>
-
 <html lang="en"
       class="light-style layout-wide customizer-hide"
       dir="ltr"
@@ -131,11 +14,11 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Register</title>
+    <title>Parent Signup</title>
 
     <meta name="description" content="" />
 
-   @*  <!-- Favicon -->
+    @* <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" /> *@
 
     <!-- Fonts -->
@@ -171,7 +54,7 @@
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner">
-                <!-- Register Card -->
+                <!-- Register -->
                 <div class="card">
                     <div class="card-body">
                         <!-- Logo -->
@@ -220,29 +103,31 @@
                                         </g>
                                     </svg>
                                 </span>
-@*                                 <span class="app-brand-text demo text-body fw-bold">BFF</span>
- *@                            </a>
+                                @*                                 <span class="app-brand-text demo text-body fw-bold">Sneat</span>
+                                *@
+                            </a>
                         </div>
                         <!-- /Logo -->
-                        <h4 class="mb-2">Adventure starts here 🚀</h4>
-                        <p class="mb-4">Make your parenting management easy and fun!</p>
+                        <h4 class="mb-2">Welcome Parent ! 👋</h4>
+                        <p class="mb-4">Please Login to your dashboard & start the adventure</p>
 
                         <form id="formAuthentication" class="mb-3" action="index.html">
                             <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
+                                <label for="email" class="form-label">Email</label>
                                 <input type="text"
                                        class="form-control"
-                                       id="username"
-                                       name="username"
-                                       placeholder="Enter your username"
+                                       id="email"
+                                       name="email-username"
+                                       placeholder="Enter your email or username"
                                        autofocus />
                             </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" />
-                            </div>
                             <div class="mb-3 form-password-toggle">
-                                <label class="form-label" for="password">Password</label>
+                                <div class="d-flex justify-content-between">
+                                    <label class="form-label" for="password">Password</label>
+                                    <a href="auth-forgot-password-basic.html">
+                                        <small>Forgot Password?</small>
+                                    </a>
+                                </div>
                                 <div class="input-group input-group-merge">
                                     <input type="password"
                                            id="password"
@@ -253,32 +138,28 @@
                                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                 </div>
                             </div>
-
                             <div class="mb-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" />
-                                    <label class="form-check-label" for="terms-conditions">
-                                        I agree to
-                                        <a href="javascript:void(0);">privacy policy & terms</a>
-                                    </label>
+                                    <input class="form-check-input" type="checkbox" id="remember-me" />
+                                    <label class="form-check-label" for="remember-me"> Remember Me </label>
                                 </div>
                             </div>
-                            <button class="btn btn-primary d-grid w-100">Sign up</button>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" type="submit">Login</button>
+                            </div>
                         </form>
 
                         <p class="text-center">
-                            <span>Already have an account?</span>
-                            <a href="auth-login-basic.html">
-                                <span>Login instead</span>
+                            <button class="btn btn-primary" type="submit">Signup</button>
+                            <a href="BaitiApp/Signup">
+                                <!-- <span>Create an account</span> -->
                             </a>
                         </p>
                     </div>
                 </div>
-                <!-- Register Card -->
             </div>
         </div>
     </div>
-
 
 
     <!-- Core JS -->
@@ -296,10 +177,8 @@
     <script src="../assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 </html>
-
 
 <!-- DONE-->
