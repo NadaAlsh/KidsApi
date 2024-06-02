@@ -46,13 +46,13 @@ namespace KidsWebMvc.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Requests()
-        {
-          var request = await _client.GetRequests();
-        return View(request);
-        }
-
-
-
+    public async Task<IActionResult> Balance(int childId)
+    {
+      var balance = await _client.GetBalance(childId);
+      return View(balance);
     }
+
+
+
+  }
 }
