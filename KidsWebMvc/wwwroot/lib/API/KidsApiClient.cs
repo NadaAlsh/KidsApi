@@ -31,7 +31,7 @@ namespace KidsWebMvc.API
         }
         public async Task<string> Login(string username, string password)
         {
-            var response = await _api.PostAsJsonAsync("/api/login",
+            var response = await _api.PostAsJsonAsync("/api/parent/login",
                 new UserLoginRequest { Username = username, Password = password });
 
             if (response.IsSuccessStatusCode)
@@ -39,13 +39,14 @@ namespace KidsWebMvc.API
                 var tokenResponse = await response.Content.ReadFromJsonAsync<UserLoginResponce>();
 
                 var token = tokenResponse.Token;
+
                 return token;
             }
             return "";
         }
         public async Task<string> ChildLogin(string username, string password)
         {
-            var response = await _api.PostAsJsonAsync("/api/login",
+            var response = await _api.PostAsJsonAsync("/api/child/login",
                 new ChildLoginRequest { Username = username, Password = password });
 
             if (response.IsSuccessStatusCode)
