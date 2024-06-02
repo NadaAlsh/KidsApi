@@ -1,6 +1,9 @@
-﻿namespace KidsApi.Models.Entites
+﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace KidsApi.Models.Entites
 {
-    public class Task
+    public class MyTask
     {
         public int Id { get; set; }
         public int ParentId { get; set; }
@@ -8,7 +11,14 @@
         public string Description { get; set; }
         public DateOnly Date { get; set; }
         public int Points { get; set; }
-        public List<Child> children { get; set;}
+        public int childId { get; set;}
+        //public List<Category> Category { get; set; }
+        public Category Category { get; set; }
+        public int CategoryId { get;  set; }
+        public bool isCompleted { get; set;}
+
+        [ForeignKey("ParentId")]
+        public Parent Parent { get; set; }
     }
 
     public class completedTask
@@ -20,3 +30,4 @@
 
     }
 }
+

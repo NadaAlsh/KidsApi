@@ -9,11 +9,18 @@ namespace KidsApi.Models.Entites
         public string Username { get; set; }
         public string Password { get; set; }
         public int ParentId { get; set; }
+        public bool isCompleted { get; set; }
         public int Points { get; set; }
         public int BaitiAccountNumber { get; set; }
-        public int SavingsAccountNumber { get; set; }
-        public List<Task> Tasks { get; set; }
-   //     public List<Request> Requests { get; set; }
+        public int SavingsAccountNumber { get; set; }//savings
+        public decimal Balance { get; set; }
+
+        public ICollection<ParentChildRelationship> ParentChildRelationships { get; set; }
+
+        public ICollection<MyTask> Tasks { get; set; } = new List<MyTask>();
+  
+      //  public List<Request> Requests { get; set; }
+
 
 
     }
