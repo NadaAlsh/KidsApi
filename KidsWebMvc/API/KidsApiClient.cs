@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
 using KidsApi.Models.Entites;
@@ -12,9 +12,12 @@ namespace KidsWebMvc.API
     public class KidsApiClient
     {
             private readonly HttpClient _api;
+
+            private readonly IHttpContextAccessor _httpContextAccessor;
             public KidsApiClient(IHttpContextAccessor accessor, IHttpClientFactory factory)
             {
                 _api = factory.CreateClient("KidsApi");
+               _httpContextAccessor = accessor;
 
                 var token = accessor.HttpContext.Session.GetString("Token");
                 _api.DefaultRequestHeaders.Authorization =
