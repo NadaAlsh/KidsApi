@@ -71,7 +71,15 @@ namespace KidsWebMvc.API
                 .GetFromJsonAsync<IEnumerable<MyTask>>($"api/child/GetTasks/{childId}");
             return response;
         }
+        public async Task<MyTask> AddTask(TaskRequest request)
+        {
+            var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+            var response = await _api.PostAsync("api/AddTask", content);
+            response.EnsureSuccessStatusCode();
 
+            var newTask = await response.Content.ReadFromJsonAsync<MyTask>();
+            return newTask;
+        }
         public async Task<ChildAccountResponce> GetDetails(int id)
         {
             var response = await _api
@@ -169,6 +177,18 @@ namespace KidsWebMvc.API
 
             var newTransfer = await response.Content.ReadFromJsonAsync<Transfer>();
             return newTransfer;
+        }
+
+        public async Task<List<ClaimedRewardResponce>> GetClaimedRewards(int childId)
+        {
+            var response = await _api.GetFromJsonAsync<List<ClaimedRewardResponce>>($"api/child/{childId}/claimedrewards");
+            return response;
+        }
+
+        public async Task<List<TaskHistoryResponse>> GetTaskHistory(int childId)
+        {
+            var response = await _api.GetFromJsonAsync<List<TaskHistoryResponse>>($"api/parent/child/{childId}/taskhistory");
+            return response;
         }
     }
 }
