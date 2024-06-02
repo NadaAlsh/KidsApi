@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+            .header .logo {
+                font-size: 24px;
+                font-weight: bold;
+            }
+
+            .header nav a {
+                margin: 0 15px;
+                text-decoration: none;
+                color: #333;
+            }
+
+            .header .profile {
+                background-color: #d3e4fd;
+                padding: 10px 20px;
+                border-radius: 20px;
+            }
+
+        .main {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .requests {
+            margin-top: 20px;
+        }
+
+            .requests h2 {
+                font-size: 24px;
+                color: #b0b0b0;
+                margin-bottom: 20px;
+            }
+
+        .request-item {
+            background-color: #e7edf9;
+            padding: 20px;
+            border-radius: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+            .request-item h3 {
+                margin: 0;
+                font-size: 18px;
+                color: #7b7b7b;
+            }
+
+            .request-item .buttons {
+                display: flex;
+                gap: 10px;
+            }
+
+            .request-item .button {
+                background-color: #fff;
+                padding: 10px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-shadow: 0 0 5px rgba(0,0,0,0.1);
+                cursor: pointer;
+            }
+
+                .request-item .button.reject {
+                    color: #ff0000;
+                }
+
+                .request-item .button.accept {
+                    color: #00ff00;
+                }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <main class="main">
+            <div class="requests">
+                <h2>Requests</h2>
+
+                <h3>Ahmad request:</h3>
+                <div class="request-item">
+                    <div></div>
+                    <div class="buttons">
+                        <div class="button reject">✖</div>
+                    </div>
+                </div>
+                <div class="request-item">
+                    <div></div>
+                    <div class="buttons">
+                        <div class="button accept">✔️</div>
+                    </div>
+                </div>
+                <div class="request-item">
+                    <div></div>
+                    <div class="buttons">
+                        <div class="button accept">✔️</div>
+                        <div class="button reject">✖</div>
+                    </div>
+                </div>
+
+                <h3>Fatima request:</h3>
+                <div class="request-item">
+                    <div></div>
+                    <div class="buttons">
+                        <div class="button accept">✔️</div>
+                        <div class="button reject">✖</div>
+                    </div>
+                </div>
+                <div class="request-item">
+                    <div></div>
+                    <div class="buttons">
+                        <div class="button accept">✔️</div>
+                        <div class="button reject">✖</div>
+                    </div>
+                </div>
+                <div class="request-item">
+                    <div></div>
+                    <div class="buttons">
+                        <div class="button accept">✔️</div>
+                        <div class="button reject">✖</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
