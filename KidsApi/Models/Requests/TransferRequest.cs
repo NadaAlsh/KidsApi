@@ -3,6 +3,10 @@
     public class TransferRequest
     {
         public int PointsToTransfer { get; set; }
+        public string TrasferType { get; set; }
+        public string ChildId { get; set; }
+
         public string Type { get; set; }
+
     }
 }
