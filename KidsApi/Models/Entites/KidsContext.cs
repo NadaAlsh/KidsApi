@@ -18,6 +18,8 @@ namespace KidsApi.Models.Entites
         public DbSet<Reward> Rewards { get; set; }
         public DbSet<ParentChildRelationship> ParentChildRelationships { get; set; }
         public DbSet<ClaimedRewards> ClaimedRewards { get; set; }
+        public DbSet<Transfer> Transfers { get; set; }
+
         public KidsContext(DbContextOptions<KidsContext> options) : base(options)
         {
           
