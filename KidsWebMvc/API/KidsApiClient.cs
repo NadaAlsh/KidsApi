@@ -93,7 +93,18 @@ namespace KidsWebMvc.API
                 .GetFromJsonAsync<ChildAccountResponce>($"api/child/Details/{id}");
             return response;
         }
-        public async Task<Reward> AddReward(AddRewardRequest req)
+
+    public async Task<ChildAccountResponce> UpdateDetails(int id, ChildAccountUpdateRequest request)
+    {
+      var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+      var response = await _api.PatchAsync($"api/parent/Details/{id}", content);
+      response.EnsureSuccessStatusCode();
+
+      var updatedChild = await response.Content.ReadFromJsonAsync<ChildAccountResponce>();
+      return updatedChild;
+    }
+
+    public async Task<Reward> AddReward(AddRewardRequest req)
         {
             var content = new StringContent(JsonSerializer.Serialize(req), Encoding.UTF8, "application/json");
             var response = await _api.PostAsync("api/parent/AddReward", content);
@@ -197,6 +208,16 @@ namespace KidsWebMvc.API
             var response = await _api.GetFromJsonAsync<List<TaskHistoryResponse>>($"api/parent/child/{childId}/taskhistory");
             return response;
         }
+
+    public async Task<ClaimedRewardResponce> ClaimReward(int childId, ClaimedRewards request)
+    {
+      var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+      var response = await _api.PostAsync($"api/child/{childId}/claimThisReward", content);
+      response.EnsureSuccessStatusCode();
+
+      var newClaimedReward = await response.Content.ReadFromJsonAsync<ClaimedRewardResponce>();
+      return newClaimedReward;
     }
+  }
 }
     
