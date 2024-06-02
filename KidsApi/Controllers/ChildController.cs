@@ -254,6 +254,35 @@ namespace KidsApi.Controllers
             return Ok(pointsResponse);
         }
 
+        [HttpGet("{parentId}/transfers/{childId}")]
+        public IActionResult GetTransfers(int parentId, int childId)
+        {
+            var parent = _context.Parent
+               .Include(p => p.ParentChildRelationships)
+               .ThenInclude(pcr => pcr.Child)
+               .FirstOrDefault(p => p.ParentId == parentId);
+
+            if (parent == null)
+            {
+                return NotFound();
+            }
+
+            var child = parent.ParentChildRelationships
+               .Select(pcr => pcr.Child)
+               .FirstOrDefault(c => c.Id == childId);
+
+            if (child == null)
+            {
+                return NotFound();
+            }
+
+            var transfers = _context.Transfers
+               .Where(t => t.ChildId == childId && t.ParentId == parentId)
+               .ToList();
+
+            return Ok(transfers);
+        }
+
 
         [HttpPost("{parentId}/transfer/{childId}")]
         public IActionResult TransferPointsToMoney(int parentId, int childId, TransferRequest request)
@@ -283,7 +312,18 @@ namespace KidsApi.Controllers
             }
 
             child.Points -= request.PointsToTransfer;
-            parent.Balance += request.PointsToTransfer; 
+            parent.Balance += request.PointsToTransfer;
+            _context.SaveChanges();
+
+            Transfer transfer = new Transfer()
+            {
+                 amount = request.PointsToTransfer,
+                    TransferType = request.Type,
+                    ParentId = parentId,
+                    ChildId = childId,
+
+             };
+            _context.Transfers.Add(transfer);
             _context.SaveChanges();
 
             return Ok(new { Message = "Transfer successful." });

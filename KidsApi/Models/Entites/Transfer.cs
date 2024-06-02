@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public int ChildId { get; set; }
+        public int ParentId { get; set; }
         public int amount { get; set; }
         public string TransferType { get; set; }
     }
