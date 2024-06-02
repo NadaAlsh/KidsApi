@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using KidsApi.Models.Requests;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 //using System.Data.Entity;
 

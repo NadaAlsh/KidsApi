@@ -283,7 +283,7 @@ namespace KidsApi.Controllers
             }
 
             child.Points -= request.PointsToTransfer;
-            parent.Balance += request.PointsToTransfer * 0.1M; // assuming 1 point = $0.10
+            parent.Balance += request.PointsToTransfer; 
             _context.SaveChanges();
 
             return Ok(new { Message = "Transfer successful." });
@@ -320,6 +320,30 @@ namespace KidsApi.Controllers
                 .ToList();
 
             return Ok(claimedRewards);
+        }
+
+
+        [HttpPost("{childId}/claimThisReward")]
+        public IActionResult AddClaimedReward(int childId, ClaimedRewards request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var ClaimedReward = new ClaimedRewards
+            {
+                ChildId = childId,
+                RewardId = request.RewardId,
+                claimDate = request.claimDate,
+                // Add any other properties you want to include in the claimed reward
+            };
+
+            _context.ClaimedRewards.Add(ClaimedReward);
+            _context.SaveChanges();
+
+
+            return CreatedAtAction(nameof(AddClaimedReward), new { rewardId = ClaimedReward.Id }, ClaimedReward);
         }
     }
 }

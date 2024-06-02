@@ -8,6 +8,7 @@
         public string Password { get; set; }
         public int Points { get; set; }
         public int SavingsAccountNumber { get; set; }
+        public int BaitiAccountNumber { get; set; }
 
     }
 }
