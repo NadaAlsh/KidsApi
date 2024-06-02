@@ -176,7 +176,10 @@ namespace KidsApi.Controllers
             {
                 Username = request.Username,
                 Password = request.Password,
-                ParentId = request.ParentId
+                ParentId = request.ParentId,
+                BaitiAccountNumber = request.BaitiAccountNumber,
+                Points = request.Points,
+
             };
 
             // add child to database
@@ -276,7 +279,7 @@ namespace KidsApi.Controllers
         //    return CreatedAtAction(nameof(Details), new { Id = newReward.Id }, newReward);
         //}
 
-        [HttpGet]
+        [HttpGet("GetAllRewardsForParents")]
         public IActionResult GetAllRewards()
         {
             var rewards = context.Rewards.ToList();

@@ -254,6 +254,35 @@ namespace KidsApi.Controllers
             return Ok(pointsResponse);
         }
 
+        [HttpGet("{parentId}/transfers/{childId}")]
+        public IActionResult GetTransfers(int parentId, int childId)
+        {
+            var parent = _context.Parent
+               .Include(p => p.ParentChildRelationships)
+               .ThenInclude(pcr => pcr.Child)
+               .FirstOrDefault(p => p.ParentId == parentId);
+
+            if (parent == null)
+            {
+                return NotFound();
+            }
+
+            var child = parent.ParentChildRelationships
+               .Select(pcr => pcr.Child)
+               .FirstOrDefault(c => c.Id == childId);
+
+            if (child == null)
+            {
+                return NotFound();
+            }
+
+            var transfers = _context.Transfers
+               .Where(t => t.ChildId == childId && t.ParentId == parentId)
+               .ToList();
+
+            return Ok(transfers);
+        }
+
 
         [HttpPost("{parentId}/transfer/{childId}")]
         public IActionResult TransferPointsToMoney(int parentId, int childId, TransferRequest request)
@@ -283,7 +312,18 @@ namespace KidsApi.Controllers
             }
 
             child.Points -= request.PointsToTransfer;
-            parent.Balance += request.PointsToTransfer * 0.1M; // assuming 1 point = $0.10
+            parent.Balance += request.PointsToTransfer;
+            _context.SaveChanges();
+
+            Transfer transfer = new Transfer()
+            {
+                 amount = request.PointsToTransfer,
+                    TransferType = request.Type,
+                    ParentId = parentId,
+                    ChildId = childId,
+
+             };
+            _context.Transfers.Add(transfer);
             _context.SaveChanges();
 
             return Ok(new { Message = "Transfer successful." });
@@ -320,6 +360,30 @@ namespace KidsApi.Controllers
                 .ToList();
 
             return Ok(claimedRewards);
+        }
+
+
+        [HttpPost("{childId}/claimThisReward")]
+        public IActionResult AddClaimedReward(int childId, ClaimedRewards request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var ClaimedReward = new ClaimedRewards
+            {
+                ChildId = childId,
+                RewardId = request.RewardId,
+                claimDate = request.claimDate,
+                // Add any other properties you want to include in the claimed reward
+            };
+
+            _context.ClaimedRewards.Add(ClaimedReward);
+            _context.SaveChanges();
+
+
+            return CreatedAtAction(nameof(AddClaimedReward), new { rewardId = ClaimedReward.Id }, ClaimedReward);
         }
     }
 }

@@ -10,11 +10,5 @@
         public List<Child> Children { get; set; }
     }
 
-    public class ClaimedRewards
-    {
-        public int Id { get; set; }
-        public int RewardId { get; set; }
-        public int ChildId { get; set; }
-        public DateOnly claimDate { get; set; }
-    }
+ 
 }
