@@ -13,12 +13,12 @@ namespace KidsWebMvc.API
     {
             private readonly HttpClient _api;
 
-            private readonly IHttpContextAccessor _httpContextAccessor;
+         //   private readonly IHttpContextAccessor _httpContextAccessor;
             public KidsApiClient(HttpClient httpClient,IHttpContextAccessor accessor, IHttpClientFactory factory)
             {
                   _api = httpClient;
                 _api = factory.CreateClient("KidsApi");
-               _httpContextAccessor = accessor;
+            //   _httpContextAccessor = accessor;
 
 
 
