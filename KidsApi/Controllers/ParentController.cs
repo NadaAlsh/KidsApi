@@ -374,21 +374,6 @@ namespace KidsApi.Controllers
         }
 
 
-        [HttpGet("child/{childId}/claimedrewards")]
-        public ActionResult<List<ClaimedRewardResponce>> GetClaimedRewards(int childId)
-        {
-            var claimedRewards = context.ClaimedRewards
-                .Where(cr => cr.ChildId == childId)
-                .Select(cr => new ClaimedRewardResponce
-                {
-                    RewardId = cr.RewardId,
-                    ClaimDate = cr.claimDate,
-                    // Add any other properties you want to include in the response
-                })
-                .ToList();
-
-            return Ok(claimedRewards);
-        }
 
     
 
