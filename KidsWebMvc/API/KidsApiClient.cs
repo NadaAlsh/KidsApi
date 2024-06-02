@@ -14,10 +14,13 @@ namespace KidsWebMvc.API
             private readonly HttpClient _api;
 
             private readonly IHttpContextAccessor _httpContextAccessor;
-            public KidsApiClient(IHttpContextAccessor accessor, IHttpClientFactory factory)
+            public KidsApiClient(HttpClient httpClient,IHttpContextAccessor accessor, IHttpClientFactory factory)
             {
+                  _api = httpClient;
                 _api = factory.CreateClient("KidsApi");
                _httpContextAccessor = accessor;
+
+
 
                 var token = accessor.HttpContext.Session.GetString("Token");
                 _api.DefaultRequestHeaders.Authorization =
