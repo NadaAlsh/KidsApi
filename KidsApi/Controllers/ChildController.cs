@@ -123,8 +123,15 @@ namespace KidsApi.Controllers
             return Ok(new ChildLoginResponse
             {
 
-                Token = response.Token
-
+                Token = response.Token,
+                Username = child.Username,
+                BaitiAccountNumber = child.BaitiAccountNumber,
+                SavingsAccountNumber = child.SavingsAccountNumber,
+                Balance = child.Balance,
+                Points  = child.Points,
+                ParentId = child.ParentId,
+                ChildId = child.Id,
+                
             });
         }
 
