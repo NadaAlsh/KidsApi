@@ -1,4 +1,4 @@
-﻿using KidsWebMvc.API;
+using KidsWebMvc.API;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KidsWebMvc.Controllers
@@ -33,9 +33,12 @@ namespace KidsWebMvc.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> TaskJistory()
+        public async Task<IActionResult> TaskHistory(int childId)
         {
-            return View();
+      
+        var taskHistory = await _client.GetTaskHistory(childId);
+
+        return View(taskHistory);
         }
 
         public async Task<IActionResult> AddReward()
@@ -45,7 +48,8 @@ namespace KidsWebMvc.Controllers
 
         public async Task<IActionResult> Requests()
         {
-            return View();
+          var request = await _client.GetRequests();
+        return View(request);
         }
 
 
