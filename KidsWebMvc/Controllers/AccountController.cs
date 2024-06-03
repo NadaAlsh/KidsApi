@@ -1,4 +1,4 @@
-﻿using KidsApi.Models.Requests;
+using KidsApi.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -59,7 +59,7 @@ namespace KidsWebMvc.Controllers
                 HttpContext.Session.SetString("Token", jwtToken);
                 HttpContext.Response.Cookies.Append("Token", jwtToken);
 
-                return Redirect("/Home/Index");
+                return Redirect("/BaitiApp/Index");
             }
              
 
@@ -79,4 +79,3 @@ namespace KidsWebMvc.Controllers
 }
 
 
- 

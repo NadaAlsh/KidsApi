@@ -105,7 +105,7 @@ app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}");
+    pattern: "{controller=BaitiApp}/{action=Login}/{id?}");
 
 app.Run();
 
