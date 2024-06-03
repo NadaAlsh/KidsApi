@@ -236,6 +236,40 @@ namespace KidsApi.Controllers
             return Ok(balanceResponse);
         }
 
+        [HttpPost("{childId}/transfer-to-baitiaccount")]
+        public IActionResult TransferToBaitiAccount(int childId, TransferToBaitiAccountRequest request)
+        {
+            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
+
+            if (child == null)
+            {
+                return NotFound();
+            }
+
+            if (child.Balance < request.Amount)
+            {
+                return BadRequest("Insufficient balance");
+            }
+
+            child.Balance -= request.Amount;
+            child.BaitiAccountNumber += request.Amount;
+            _context.SaveChanges();
+
+            var transfer = new Transfer
+            {
+                amount = request.Amount,
+                TransferType = "BaitiAccount",
+                ParentId = child.ParentId,
+                ChildId = childId
+            };
+
+            _context.Transfers.Add(transfer);
+            _context.SaveChanges();
+
+            return Ok(new { Message = "Transfer successful." });
+        }
+
+
 
         [HttpGet("GetPoints/{childId}")]
         public ActionResult<PointsResponse> GetPoints(int childId)
