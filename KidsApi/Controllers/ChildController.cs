@@ -254,34 +254,55 @@ namespace KidsApi.Controllers
             return Ok(pointsResponse);
         }
 
-        [HttpGet("{parentId}/transfers/{childId}")]
-        public IActionResult GetTransfers(int parentId, int childId)
+        [HttpGet("{parentId}/transfers")]
+        public IActionResult GetTransfers(int parentId)
         {
             var parent = _context.Parent
-               .Include(p => p.ParentChildRelationships)
-               .ThenInclude(pcr => pcr.Child)
-               .FirstOrDefault(p => p.ParentId == parentId);
+                .Include(p => p.ParentChildRelationships)
+                .ThenInclude(pcr => pcr.Child)
+                .FirstOrDefault(p => p.ParentId == parentId);
 
             if (parent == null)
             {
                 return NotFound();
             }
 
-            var child = parent.ParentChildRelationships
-               .Select(pcr => pcr.Child)
-               .FirstOrDefault(c => c.Id == childId);
-
-            if (child == null)
-            {
-                return NotFound();
-            }
-
             var transfers = _context.Transfers
-               .Where(t => t.ChildId == childId && t.ParentId == parentId)
-               .ToList();
+                .Where(t => t.ParentId == parentId)
+                .Include(t => t.ChildId)
+                .Include(t => t.ParentId)
+                .ToList();
 
             return Ok(transfers);
         }
+        //[HttpGet("{parentId}/transfers/{childId}")]
+        //public IActionResult GetTransfers(int parentId, int childId)
+        //{
+        //    var parent = _context.Parent
+        //       .Include(p => p.ParentChildRelationships)
+        //       .ThenInclude(pcr => pcr.Child)
+        //       .FirstOrDefault(p => p.ParentId == parentId);
+
+        //    if (parent == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var child = parent.ParentChildRelationships
+        //       .Select(pcr => pcr.Child)
+        //       .FirstOrDefault(c => c.Id == childId);
+
+        //    if (child == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var transfers = _context.Transfers
+        //       .Where(t => t.ChildId == childId && t.ParentId == parentId)
+        //       .ToList();
+
+        //    return Ok(transfers);
+        //}
 
 
         [HttpPost("{parentId}/transfer/{childId}")]
