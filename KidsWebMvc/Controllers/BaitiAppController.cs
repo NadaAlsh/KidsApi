@@ -44,5 +44,9 @@ namespace KidsWebMvc.Controllers
     {
       return View();
     }
+    public IActionResult EditDetails ()
+    {
+      return View();
+    }
   }
 }
