@@ -1,7 +1,8 @@
 @{
     Layout = "";
 }
-
+@using KidsApi.Models.Requests
+@model UserLoginRequest
 <!DOCTYPE html>
 <html lang="en"
       class="light-style layout-wide customizer-hide"
@@ -70,12 +71,12 @@
                          
                         <form id="formAuthentication" class="mb-3" action="index.html">
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
+                                <label for="username" class="form-label">username</label>
                                 <input type="text"
                                        class="form-control"
                                        id="email"
-                                       name="email-username"
-                                       placeholder="Enter your email or username"
+                                       name="Username"
+                                       placeholder="Enter your username"
                                        autofocus />
                             </div>
                             <div class="mb-3 form-password-toggle">
