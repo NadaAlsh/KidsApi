@@ -13,20 +13,20 @@ namespace KidsWebMvc.API
     {
             private readonly HttpClient _api;
 
-         //   private readonly IHttpContextAccessor _httpContextAccessor;
-            public KidsApiClient(HttpClient httpClient,IHttpContextAccessor accessor, IHttpClientFactory factory)
-            {
-                  _api = httpClient;
-                _api = factory.CreateClient("KidsApi");
-            //   _httpContextAccessor = accessor;
+    //   private readonly IHttpContextAccessor _httpContextAccessor;
+    public KidsApiClient(HttpClient httpClient, IHttpContextAccessor accessor, IHttpClientFactory factory)
+    {
+      _api = httpClient;
+      _api.BaseAddress = new Uri("https://kidsapi20240528084240.azurewebsites.net");
+      _api.DefaultRequestHeaders.Accept.Clear();
+      _api.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+      var token = accessor.HttpContext.Session.GetString("Token");
+      _api.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    }
 
 
-
-                var token = accessor.HttpContext.Session.GetString("Token");
-                _api.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-            }
-        public async Task<bool> Register(SignUpRequest request)
+    public async Task<bool> Register(SignUpRequest request)
         {
             var response = await _api.PostAsJsonAsync("/api/Registor", request);
             if (response.IsSuccessStatusCode)
@@ -35,22 +35,37 @@ namespace KidsWebMvc.API
             }
             return false;
         }
-        public async Task<string> Login(string username, string password)
-        {
-            var response = await _api.PostAsJsonAsync("/api/parent/login",
-                new UserLoginRequest { Username = username, Password = password });
+    //public async Task<string> Login(string username, string password)
+    //{
+    //    var response = await _api.PostAsJsonAsync("/api/parent/login",
+    //        new UserLoginRequest { Username = username, Password = password });
 
-            if (response.IsSuccessStatusCode)
-            {
-                var tokenResponse = await response.Content.ReadFromJsonAsync<UserLoginResponce>();
+    //    if (response.IsSuccessStatusCode)
+    //    {
+    //        var tokenResponse = await response.Content.ReadFromJsonAsync<UserLoginResponce>();
 
-                var token = tokenResponse.Token;
+    //        var token = tokenResponse.Token;
 
-                return token;
-            }
-            return "";
-        }
-        public async Task<string> ChildLogin(string username, string password)
+    //        return token;
+    //    }
+    //    return "";
+    //}
+    public async Task<string> Login(string username, string password)
+    {
+      var response = await _api.PostAsJsonAsync("/api/parent/login",
+          new UserLoginRequest { Username = username, Password = password });
+
+      if (response.IsSuccessStatusCode)
+      {
+        var tokenResponse = await response.Content.ReadFromJsonAsync<UserLoginResponce>();
+
+        var token = tokenResponse.Token;
+
+        return token;
+      }
+      return "";
+    }
+    public async Task<string> ChildLogin(string username, string password)
         {
             var response = await _api.PostAsJsonAsync("/api/child/login",
                 new ChildLoginRequest { Username = username, Password = password });
