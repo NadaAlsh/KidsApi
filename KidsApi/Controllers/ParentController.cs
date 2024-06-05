@@ -1,4 +1,5 @@
-﻿using KidsApi.Models.Entites;
+﻿using Azure.Core;
+using KidsApi.Models.Entites;
 using KidsApi.Models.Requests;
 using KidsApi.Models.Responses;
 using KidsApi.Services;
@@ -29,11 +30,19 @@ namespace KidsApi.Controllers
 
         public IActionResult Login(UserLoginRequest loginDetails)
         {
-
+            var parent = context.Parent
+            .Where(c => c.Username == loginDetails.Username && c.Password == loginDetails.Password)
+                .FirstOrDefault();
             var response = service.GenerateToken(loginDetails.Username, loginDetails.Password);
             if (response.IsValid)
             {
-                return Ok(new UserLoginResponce { Token = response.Token });
+                return Ok(new UserLoginResponce {
+                        Token = response.Token,
+                        ParentId = parent.ParentId,
+                        Username = parent.Username,
+                    });
+
+           
             }
             return BadRequest("Username and/or Password is wrong");
         }
