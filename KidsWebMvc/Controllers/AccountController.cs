@@ -34,24 +34,6 @@ namespace KidsWebMvc.Controllers
       return View(req);
     }
 
-    //[HttpGet]
-    //public IActionResult Register()
-    //{
-    //  var signUpRequest = new SignUpRequest();
-    //  return View(signUpRequest);
-    //}
-
-    //[HttpPost]
-    //    public async Task<IActionResult> Register(SignUpRequest req)
-    //    {
-    //        var created = await _api.Register(req);
-    //        if (created)
-    //        { 
-    //            return Redirect("/Account/Login");
-    //        }
-    //        ModelState.AddModelError("Username", "Something happened, Could not create user");
-    //        return View(req);
-    //    }
     [HttpGet]
     public IActionResult Login()
     {
@@ -97,7 +79,7 @@ namespace KidsWebMvc.Controllers
     public IActionResult Logout()
         {
             HttpContext.SignOutAsync(); 
-            return Redirect("/Home/Index");
+            return Redirect("/");
         }
         public IActionResult Denied()
         {

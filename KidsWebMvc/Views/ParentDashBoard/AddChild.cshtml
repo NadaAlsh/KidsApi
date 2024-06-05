@@ -1,11 +1,11 @@
-@* @using KidsApi.Models.Requests
+@using KidsApi.Models.Requests
 @model AddChildRequest
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="card">
         <div class="card-body">
             <h4 class=" mb-2 text-center">Add Child  </h4>
             
-            <form id="formAuthentication" class="mb-3" action="index.html">
+            <form id="formAuthentication" class="mb-3" asp-action="AddChild" method="post">
                 <div class="mb-3">
                     <label for="reward" class="form-label">Child Username </label>
                     <input type="text"
@@ -56,70 +56,6 @@
             </form>
 
 
-        </div>
-    </div>
-</div>
- *@
- @using KidsApi.Models.Requests
-@model AddChildRequest
-
-<div class="container-xxl flex-grow-1 container-p-y">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="mb-2 text-center">Add Child</h4>
-
-            @using (Html.BeginForm("AddChild", "ParentDashBorad", FormMethod.Post))
-            {
-                <div class="mb-3">
-                    <label for="username" class="form-label">Child Username</label>
-                    <input type="text"
-                           class="form-control"
-                           id="username"
-                           name="username"
-                           placeholder="Enter your kid's username"
-                           autofocus
-                           value="@Model.Username" />
-                    <span asp-validation-for="Username" class="text-danger"></span>
-                </div>
-                <div class="mb-3 form-password-toggle">
-                    <div class="d-flex justify-content-between">
-                        <label class="form-label" for="password">Password</label>
-                    </div>
-                    <div class="input-group input-group-merge">
-                        <input type="password"
-                               id="password"
-                               class="form-control"
-                               name="password"
-                               placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                               aria-describedby="password" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="savingsAccountNumber" class="form-label">Baiti Account Number</label>
-                    <input type="text"
-                           class="form-control"
-                           id="savingsAccountNumber"
-                           name="savingsAccountNumber"
-                           placeholder="Child's Baiti account number"
-                           value="@Model.SavingsAccountNumber" />
-                    <span asp-validation-for="SavingsAccountNumber" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label for="points" class="form-label">Points</label>
-                    <input type="text"
-                           class="form-control"
-                           id="points"
-                           name="points"
-                           placeholder="Enter points"
-                           value="@Model.Points" />
-                    <span asp-validation-for="Points" class="text-danger"></span>
-                </div>
-
-                <div class="text-center">
-                    <button class="btn btn-primary" type="submit">Add Child</button>
-                </div>
-            }
         </div>
     </div>
 </div>
