@@ -117,7 +117,7 @@ namespace KidsApi.Controllers
         //    return categories;
         //}
 
-        [HttpGet("Details/{id}")]
+        [HttpGet("ChildDetails/{id}")]
         [ProducesResponseType(typeof(ChildAccountResponce), 200)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<ChildAccountResponce> Details([FromRoute] int id)
@@ -139,7 +139,7 @@ namespace KidsApi.Controllers
             });
         }
 
-        [HttpPatch("Details/{id}")]
+        [HttpPatch("ChildDetails/{id}")]
         [ProducesResponseType(typeof(ChildAccountResponce), 200)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<ChildAccountResponce> Details([FromRoute] int id, [FromBody] ChildAccountUpdateRequest request)
