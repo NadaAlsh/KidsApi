@@ -14,13 +14,16 @@ namespace KidsWebMvc.Controllers
         }
 
     [HttpGet]
-        public async Task<IActionResult> Index(int parentId)
+        public async Task<IActionResult> Index()
         {
+      // TODO FRom the token you get the parent id from the AppState
+      var parentId = 1;
             var child = await _client.GetChildren(parentId);
             return View(child);
         }
+    
 
-        public async Task<IActionResult> Details(int id)
+  public async Task<IActionResult> Details(int id)
         {
 
             var childDetails = await _client.GetDetails(id);
