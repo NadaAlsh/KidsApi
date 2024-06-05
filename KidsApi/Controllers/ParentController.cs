@@ -118,7 +118,28 @@ namespace KidsApi.Controllers
         //}
 
         [HttpGet("Details/{id}")]
-       [HttpPatch("Details/{id}")]
+        [ProducesResponseType(typeof(ChildAccountResponce), 200)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<ChildAccountResponce> Details([FromRoute] int id)
+        {
+            var child = context.Child.Find(id);
+            if (child == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new ChildAccountResponce
+            {
+                Id = child.Id,
+                Username = child.Username,
+                Password = child.Password,
+                SavingsAccountNumber = child.SavingsAccountNumber,
+                BaitiAccountNumber = child.BaitiAccountNumber,
+                Points = child.Points,
+            });
+        }
+
+        [HttpPatch("Details/{id}")]
         [ProducesResponseType(typeof(ChildAccountResponce), 200)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<ChildAccountResponce> Details([FromRoute] int id, [FromBody] ChildAccountUpdateRequest request)

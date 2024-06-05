@@ -6,6 +6,7 @@ using KidsApi.Models.Requests;
 using KidsApi.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Azure.Core;
 
 namespace KidsWebMvc.API
 {
@@ -34,21 +35,7 @@ namespace KidsWebMvc.API
             }
             return false;
         }
-    //public async Task<string> Login(string username, string password)
-    //{
-    //    var response = await _api.PostAsJsonAsync("/api/parent/login",
-    //        new UserLoginRequest { Username = username, Password = password });
 
-    //    if (response.IsSuccessStatusCode)
-    //    {
-    //        var tokenResponse = await response.Content.ReadFromJsonAsync<UserLoginResponce>();
-
-    //        var token = tokenResponse.Token;
-
-    //        return token;
-    //    }
-    //    return "";
-    //}
     public async Task<UserLoginResponce> Login(string username, string password)
     {
       var response = await _api.PostAsJsonAsync("/api/parent/login",
@@ -101,8 +88,9 @@ namespace KidsWebMvc.API
         }
         public async Task<ChildAccountResponce> GetDetails(int id)
         {
-            var response = await _api
-                .GetFromJsonAsync<ChildAccountResponce>($"api/child/Details/{id}");
+      var response = await _api
+                .GetFromJsonAsync<ChildAccountResponce>($"api/Parent/Details/{id}");
+
             return response;
         }
 
