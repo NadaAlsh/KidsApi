@@ -30,9 +30,7 @@ namespace KidsApi.Controllers
 
         public IActionResult Login(UserLoginRequest loginDetails)
         {
-            var parent = context.Parent
-            .Where(c => c.Username == loginDetails.Username && c.Password == loginDetails.Password)
-                .FirstOrDefault();
+            var parent = context.Parent.FirstOrDefault(c => c.Username == loginDetails.Username);
             var response = service.GenerateToken(loginDetails.Username, loginDetails.Password);
             if (response.IsValid)
             {

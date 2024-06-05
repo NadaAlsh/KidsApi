@@ -303,8 +303,6 @@ namespace KidsApi.Controllers
 
             var transfers = _context.Transfers
                 .Where(t => t.ParentId == parentId)
-                .Include(t => t.ChildId)
-                .Include(t => t.ParentId)
                 .ToList();
 
             return Ok(transfers);
