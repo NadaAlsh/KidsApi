@@ -14,27 +14,30 @@ namespace KidsWebMvc.Controllers
         }
 
     [HttpGet]
-        public async Task<IActionResult> Index(int parentId)
+        public async Task<IActionResult> Index()
         {
-            var child = await _client.GetChildren(parentId);
+            var child = await _client.GetChildren(1);
             return View(child);
         }
 
-        public async Task<IActionResult> Details(int id)
+    [HttpGet]
+    public async Task<IActionResult> ChildDetails()
         {
-
-            var childDetails = await _client.GetDetails(id);
-
-            if (childDetails == null)
-            {
-              return NotFound();
-            }
-
-            return View(childDetails);
+            return View();
         }
 
-    [HttpPatch]
-    public async Task<IActionResult> Details(int id, ChildAccountUpdateRequest model)
+    [HttpGet]
+    public async Task<IActionResult> EditChildDetails()
+    {
+      // TODO Get the childe detials form ChildDetails page 
+      ChildAccountUpdateRequest child = new ChildAccountUpdateRequest() {
+
+      };
+      return View(child);
+    }
+
+      [HttpPatch]
+    public async Task<IActionResult> EditChildDetails(int id, ChildAccountUpdateRequest model)
     {
       if (!ModelState.IsValid)
       {
@@ -61,6 +64,15 @@ namespace KidsWebMvc.Controllers
       return View(model);
     }
 
+
+    [HttpGet]
+    public async Task<IActionResult> AddChild()
+    {
+      var model = new AddChildRequest(); 
+
+      return View(model);
+    }
+
     [HttpPost]
     public async Task<IActionResult> AddChild(AddChildRequest model)
     {
@@ -84,7 +96,7 @@ namespace KidsWebMvc.Controllers
       if (newChild != null)
       {
         TempData["Message"] = "Child added successfully";
-        return RedirectToAction("Details"); // or redirect to another action
+        return RedirectToAction("Index"); 
       }
 
       ModelState.AddModelError("", "Failed to add child");
@@ -98,6 +110,11 @@ namespace KidsWebMvc.Controllers
             return View(taskHistory);
         }
 
+    [HttpGet]
+    public async Task<IActionResult> AddReward()
+    {
+      return View();
+    }
 
     [HttpPost]
     public async Task<IActionResult> AddReward(AddRewardRequest model)
@@ -128,12 +145,7 @@ namespace KidsWebMvc.Controllers
       return View(model);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAllRewards()
-    {
-      var rewards = await GetAllRewards();
-      return View(rewards);
-    }
+
 
     public async Task<IActionResult> Balance(int childId)
     {
@@ -149,10 +161,9 @@ namespace KidsWebMvc.Controllers
 
 
     [HttpGet]
-    public async Task<IActionResult> GetTask(int childId)
+    public async Task<IActionResult> AddTask()
     {
-      var task = await _client.GetPoints(childId);
-      return View(task);
+      return View();
     }
 
     [HttpPost]
