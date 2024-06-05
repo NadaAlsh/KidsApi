@@ -118,7 +118,7 @@ namespace KidsApi.Controllers
         //}
 
         [HttpGet("Details/{id}")]
-       [HttpPatch("Details/{id}")]
+        [HttpPatch("Details/{id}")]
         [ProducesResponseType(typeof(ChildAccountResponce), 200)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<ChildAccountResponce> Details([FromRoute] int id, [FromBody] ChildAccountUpdateRequest request)

@@ -34,21 +34,7 @@ namespace KidsWebMvc.API
             }
             return false;
         }
-    //public async Task<string> Login(string username, string password)
-    //{
-    //    var response = await _api.PostAsJsonAsync("/api/parent/login",
-    //        new UserLoginRequest { Username = username, Password = password });
-
-    //    if (response.IsSuccessStatusCode)
-    //    {
-    //        var tokenResponse = await response.Content.ReadFromJsonAsync<UserLoginResponce>();
-
-    //        var token = tokenResponse.Token;
-
-    //        return token;
-    //    }
-    //    return "";
-    //}
+    
     public async Task<UserLoginResponce> Login(string username, string password)
     {
       var response = await _api.PostAsJsonAsync("/api/parent/login",
@@ -93,7 +79,7 @@ namespace KidsWebMvc.API
         public async Task<MyTask> AddTask(TaskRequest request)
         {
             var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
-            var response = await _api.PostAsync("api/AddTask", content);
+            var response = await _api.PostAsync("api/parent/AddTask", content);
             response.EnsureSuccessStatusCode();
 
             var newTask = await response.Content.ReadFromJsonAsync<MyTask>();
@@ -119,7 +105,7 @@ namespace KidsWebMvc.API
     public async Task<Reward> AddReward(AddRewardRequest req)
         {
             var content = new StringContent(JsonSerializer.Serialize(req), Encoding.UTF8, "application/json");
-            var response = await _api.PostAsync("api/parent/AddReward", content);
+            var response = await _api.PostAsync("api/parent/Addrewards", content);
             response.EnsureSuccessStatusCode();
 
             var newReward = await response.Content.ReadFromJsonAsync<Reward>();
