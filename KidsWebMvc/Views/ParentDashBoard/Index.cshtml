@@ -1,3 +1,6 @@
+@using KidsApi.Models.Entites
+@model Child
+
 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
      id="layout-navbar">
     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
@@ -92,7 +95,7 @@
                 <div class="d-flex align-items-end row">
                     <div class="col-sm-7">
                         <div class="card-body">
-                            <h5 class="card-title text-primary">Hello Parent! 🎉</h5>
+                            <h5 class="card-title text-primary">Hello @ViewBag.username 🎉</h5>
                             <p class="mb-4">
                                 Time To Conect with Your Child Progress Dashboard  
                             </p>
