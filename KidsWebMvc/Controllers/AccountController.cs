@@ -15,16 +15,15 @@ namespace KidsWebMvc.Controllers
         {
             _api = api;
         }
-
     [HttpGet]
-    public IActionResult Register()
+    public IActionResult Signup()
     {
       var signUpRequest = new SignUpRequest();
       return View(signUpRequest);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(SignUpRequest req)
+    public async Task<IActionResult> Signup(SignUpRequest req)
     {
       var created = await _api.Register(req);
       if (created)
@@ -47,7 +46,7 @@ namespace KidsWebMvc.Controllers
     //    {
     //        var created = await _api.Register(req);
     //        if (created)
-    //        {
+    //        { 
     //            return Redirect("/Account/Login");
     //        }
     //        ModelState.AddModelError("Username", "Something happened, Could not create user");

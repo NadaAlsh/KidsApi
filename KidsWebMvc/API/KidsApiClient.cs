@@ -25,10 +25,9 @@ namespace KidsWebMvc.API
       _api.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 
-
     public async Task<bool> Register(SignUpRequest request)
         {
-            var response = await _api.PostAsJsonAsync("/api/Registor", request);
+            var response = await _api.PostAsJsonAsync("/api/parent/Registor", request);
             if (response.IsSuccessStatusCode)
             {
                 return true;
