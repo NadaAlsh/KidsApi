@@ -88,7 +88,7 @@ namespace KidsWebMvc.Controllers
         HttpContext.Session.SetString("Token", jwtToken);
         HttpContext.Response.Cookies.Append("Token", jwtToken);
 
-        return RedirectToAction("Index", "Account"); // Redirect to the desired page after successful login
+        return RedirectToAction("Index", "ParentDashBoard"); // Redirect to the desired page after successful login
       }
 
       ModelState.AddModelError(string.Empty, "Invalid Username and/or Password");

@@ -148,7 +148,7 @@ namespace KidsWebMvc.API
             var json = JsonSerializer.Serialize(req);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _api.PostAsync("api/parent/Add", content);
+            var response = await _api.PostAsync("api/parent/AddChild", content);
             response.EnsureSuccessStatusCode();
 
             var newChild = await response.Content.ReadFromJsonAsync<Child>();
