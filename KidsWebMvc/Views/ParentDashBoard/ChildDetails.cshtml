@@ -1,5 +1,5 @@
-@using KidsApi.Models.Entites
-@model Child
+@using KidsApi.Models.Responses
+@model ChildAccountResponce
 
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class=" mb-2 "> @Model.Username</h4>
@@ -17,7 +17,6 @@
              <div class="accordion-body">Username: @Model.Username</div>
              <div class="accordion-body">Baiti Account Number: @Model.BaitiAccountNumber  </div>
              <div class="accordion-body">Saving Account Number: @Model.SavingsAccountNumber </div>
-             <div class="accordion-body">Balance: @Model.Balance</div>
              <div class="accordion-body">Points: @Model.Points</div>
         </div>
 

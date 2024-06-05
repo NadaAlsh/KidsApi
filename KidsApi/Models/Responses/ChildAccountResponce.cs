@@ -10,6 +10,7 @@ namespace KidsApi.Models.Responses
         public string Username { get; set; }
         public string Password { get; set; }
         public int Points { get; set; }
+        public decimal Balance { get; set; }
         public int BaitiAccountNumber { get; set; }
         public int SavingsAccountNumber { get; set; }
         public List<Task> Tasks { get; set; }

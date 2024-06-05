@@ -89,15 +89,15 @@ namespace KidsWebMvc.API
         public async Task<ChildAccountResponce> GetDetails(int id)
         {
       var response = await _api
-                .GetFromJsonAsync<ChildAccountResponce>($"api/Parent/Details/{id}");
+                .GetFromJsonAsync<ChildAccountResponce>($"api/Parent/ChildDetails/{id}");
 
-            return response;
+      return response;
         }
 
     public async Task<ChildAccountResponce> UpdateDetails(int id, ChildAccountUpdateRequest request)
     {
       var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
-      var response = await _api.PatchAsync($"api/parent/Details/{id}", content);
+      var response = await _api.PatchAsync($"api/parent/ChildDetails/{id}", content);
       response.EnsureSuccessStatusCode();
 
       var updatedChild = await response.Content.ReadFromJsonAsync<ChildAccountResponce>();

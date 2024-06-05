@@ -130,7 +130,7 @@ namespace KidsApi.Controllers
                 Balance = child.Balance,
                 Points  = child.Points,
                 ParentId = child.ParentId,
-                ChildId = child.Id,
+                ChildId = child.ChildId,
                 
             });
         }
@@ -152,7 +152,7 @@ namespace KidsApi.Controllers
         public IActionResult GetTasks(int childId)
         {
             // Find child entity by ID
-            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
+            var child = _context.Child.FirstOrDefault(c => c.ChildId == childId);
 
             if (child == null)
             {
@@ -196,7 +196,7 @@ namespace KidsApi.Controllers
         [HttpPut("{childId}/tasks/{taskId}/complete")]
         public IActionResult CompleteTask(int childId, int taskId)
         {
-            var child = _context.Child.Include(c => c.Tasks).FirstOrDefault(c => c.Id == childId);
+            var child = _context.Child.Include(c => c.Tasks).FirstOrDefault(c => c.ChildId == childId);
             if (child == null)
             {
                 return NotFound(new { message = "Child not found" });
@@ -222,7 +222,7 @@ namespace KidsApi.Controllers
         [HttpGet("{childId}/balance")]
         public ActionResult<GetBalanceResponse> GetBalance(int childId)
         {
-            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
+            var child = _context.Child.FirstOrDefault(c => c.ChildId == childId);
             if (child == null)
             {
                 return NotFound();
@@ -239,7 +239,7 @@ namespace KidsApi.Controllers
         [HttpPost("{childId}/transfer-to-baitiaccount")]
         public IActionResult TransferToBaitiAccount(int childId, TransferToBaitiAccountRequest request)
         {
-            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
+            var child = _context.Child.FirstOrDefault(c => c.ChildId == childId);
 
             if (child == null)
             {
@@ -274,7 +274,7 @@ namespace KidsApi.Controllers
         [HttpGet("GetPoints/{childId}")]
         public ActionResult<PointsResponse> GetPoints(int childId)
         {
-            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
+            var child = _context.Child.FirstOrDefault(c => c.ChildId == childId);
             if (child == null)
             {
                 return NotFound();
@@ -352,7 +352,7 @@ namespace KidsApi.Controllers
 
             var child = parent.ParentChildRelationships
                 .Select(pcr => pcr.Child)
-                .FirstOrDefault(c => c.Id == childId);
+                .FirstOrDefault(c => c.ChildId == childId);
 
             if (child == null)
             {

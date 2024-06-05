@@ -130,12 +130,14 @@ namespace KidsApi.Controllers
 
             return Ok(new ChildAccountResponce
             {
-                Id = child.Id,
+                Id = child.ChildId,
                 Username = child.Username,
                 Password = child.Password,
                 SavingsAccountNumber = child.SavingsAccountNumber,
                 BaitiAccountNumber = child.BaitiAccountNumber,
                 Points = child.Points,
+                Balance = child.Balance,
+
             });
         }
 
@@ -163,12 +165,13 @@ namespace KidsApi.Controllers
 
             return Ok(new ChildAccountResponce
             {
-                Id = child.Id,
+                Id = child.ChildId,
                 Username = child.Username,
                 Password = child.Password,
                 SavingsAccountNumber = child.SavingsAccountNumber,
                 BaitiAccountNumber = child.BaitiAccountNumber,
                 Points = child.Points,
+                Balance = child.Balance,
             });
         }
         //[HttpPost("AddChild")]
@@ -218,7 +221,7 @@ namespace KidsApi.Controllers
             var parentChildRelationship = new ParentChildRelationship
             {
                 ParentId = request.ParentId,
-                ChildId = child.Id
+                ChildId = child.ChildId
             };
             context.ParentChildRelationships.Add(parentChildRelationship);
             context.SaveChanges();
@@ -341,7 +344,7 @@ namespace KidsApi.Controllers
         [HttpGet("children/{childId}/points")]
         public ActionResult<decimal> GetChildPoints(int childId)
         {
-            var child = context.Child.FirstOrDefault(c => c.Id == childId);
+            var child = context.Child.FirstOrDefault(c => c.ChildId == childId);
             if (child == null)
             {
                 return NotFound();

@@ -4,7 +4,7 @@ namespace KidsApi.Models.Entites
 {
     public class Child
     {
-        public int Id { get; set; }
+        public int ChildId { get; set; }
 
         public string Username { get; set; }
         public string Password { get; set; }
