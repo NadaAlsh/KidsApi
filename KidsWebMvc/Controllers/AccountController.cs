@@ -50,7 +50,8 @@ namespace KidsWebMvc.Controllers
         return View(request);
       }
 
-      var jwtToken = await _api.Login(request.Username, request.Password);
+      var loginResponse = await _api.Login(request.Username, request.Password);
+      var jwtToken = loginResponse.Token;
       if (!string.IsNullOrEmpty(jwtToken))
       {
         var handler = new JwtSecurityTokenHandler();
@@ -68,6 +69,8 @@ namespace KidsWebMvc.Controllers
             authProperties);
 
         HttpContext.Session.SetString("Token", jwtToken);
+        HttpContext.Session.SetString("Username", loginResponse.Username);
+        HttpContext.Session.SetString("ParentID", loginResponse.ParentId.ToString());
         HttpContext.Response.Cookies.Append("Token", jwtToken);
 
         return RedirectToAction("Index", "ParentDashBoard"); // Redirect to the desired page after successful login

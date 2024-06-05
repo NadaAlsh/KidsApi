@@ -16,8 +16,11 @@ namespace KidsWebMvc.Controllers
     [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var child = await _client.GetChildren(1);
-            return View(child);
+          var parentUsername = HttpContext.Session.GetString("Username");
+          var children = await _client.GetChildren(1);
+          ViewBag.username = parentUsername;
+         ViewBag.children = children;
+            return View();
         }
 
     [HttpGet]
