@@ -1,3 +1,5 @@
+@using KidsApi.Models.Requests
+@model ChildAccountUpdateRequest
 
 <div class="container-xxl flex-grow-1 container-p-y">
    
@@ -5,74 +7,87 @@
 
         <div class="card-body">
             <!-- /Logo -->
-            <h4 class=" mb-2 text-center"> Edit Details</h4>
+            <h4 class=" mb-2 text-center", onclick="toggleEditForm()"> Edit Details</h4>
+            <input type="hidden" name="Id" value="@Model.Id" />
 
-            <form id="formAuthentication" class="mb-3" asp-action="EditChildDetails" method="patch">
+
+            <form id="formAuthentication" class="mb-3" method="patch">
                 <div class="mb-3">
                     <label for="UserName" class="form-label">UserName</label>
                     <input type="text"
                            class="form-control"
                            id="UserName"
+                           value="@Model.Username"
                            name="UserName"
                            placeholder=""
                            autofocus />
                 </div>
                 <div class="mb-3">
-                    <label for="Email" class="form-label">Email</label>
+                    <label for="Password" class="form-label">Password</label>
                     <input type="text"
                            class="form-control"
-                           id="Email"
-                           name="Email"
+                           id="Password"
+                           value="@Model.Password"
+                           name="Password"
                            placeholder=""
                            autofocus />
                 </div>
                 <div class="mb-3">
-                    <label for="Age" class="form-label">Age</label>
+                    <label for="Points" class="form-label">Points</label>
                     <input type="text"
                            class="form-control"
-                           id="Age"
-                           name="Age"
+                           id="Points"
+                           name="Points"
+                           value="@Model.Points"
                            placeholder=""
                            autofocus />
                 </div>
                 <div class="mb-3">
-                    <label for="Gender" class="form-label">Gender</label>
+                    <label for="SavingsAccountNumber" class="form-label">Savings</label>
                     <input type="text"
                            class="form-control"
-                           id="Gender"
-                           name="Gender"
+                           id="SavingsAccountNumber"
+                           name="SavingsAccountNumber"
+                           value="@Model.SavingsAccountNumber"
                            placeholder=""
                            autofocus />
                 </div>
-
-                <div class="mb-3 form-password-toggle">
-                    <div class="d-flex justify-content-between">
-                        <label class="form-label" for="password">Password</label>
-
-                    </div>
-                    <div class="input-group input-group-merge">
-                        <input type="password"
-                               id="password"
-                               class="form-control"
-                               name="password"
-                               placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                               aria-describedby="password" />
-                        <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                    </div>
+                <div class="mb-3">
+                    <label for="Balance" class="form-label">Balance</label>
+                    <input type="text"
+                           class="form-control"
+                           id="Balance"
+                           name="Balance"
+                           value="@Model.Balance"
+                           placeholder=""
+                           autofocus />
                 </div>
-
-
-
-
+                <div class="text-center">
+                    <button class="btn btn-primary" type="submit">Edit</button>
+                </div>
 
             </form>
 
+
+
+
+            <script>
+                function toggleEditForm() {
+                    var editForm = document.getElementById('editForm');
+
+                    if (editForm.style.display === 'none') {
+                        editForm.style.display = 'block';
+                    } else {
+                        editForm.style.display = 'none';
+                    }
+                }
+            </script>
 
         </div>
     </div>
 </div>
 
-
+@* 
 <div class="container-xxl flex-grow-1 container-p-y">
 
     <div class="card">
@@ -123,7 +138,7 @@
 
         </div>
     </div>
-</div>
+</div> *@
 
 
 

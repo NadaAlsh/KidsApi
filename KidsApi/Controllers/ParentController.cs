@@ -106,16 +106,7 @@ namespace KidsApi.Controllers
             return Ok(new { Message = "Task created" });
         }
 
-        //private List<SelectListItem> GetCategories()
-        //{
-        //    var categories = context.Categories.Select(c => new SelectListItem
-        //    {
-        //        Value = c.CategoryId.ToString(),
-        //        Text = c.Name
-        //    }).ToList();
-
-        //    return categories;
-        //}
+       
 
         [HttpGet("ChildDetails/{id}")]
         [ProducesResponseType(typeof(ChildAccountResponce), 200)]
@@ -174,24 +165,7 @@ namespace KidsApi.Controllers
                 Balance = child.Balance,
             });
         }
-        //[HttpPost("AddChild")]
-        //public IActionResult AddChild(AddChildRequest req)
-        //{
-        //    var newChild = new Child()
-        //    {
-        //        Id = req.Id,
-        //        Username = req.Username,
-        //        Password = req.Password,
-        //        SavingsAccountNumber = req.SavingsAccountNumber,
-        //        Points = req.Points,
-        //        ParentId = req.ParentId,
-
-        //    };
-        //    context.Child.Add(newChild);
-        //    context.SaveChanges();
-
-        //    return CreatedAtAction(nameof(Details), new { Id = newChild.Id }, newChild);
-        //}
+  
 
         [HttpPost("addchild")]
         public ActionResult AddChild([FromBody] AddChildRequest request)
@@ -244,71 +218,7 @@ namespace KidsApi.Controllers
             return Ok(children);
         }
 
-        //[HttpPost("AddReward")]
-        //public IActionResult AddReward([FromBody] AddRewardRequest req)
-        //{
-        //    var newReward = new Reward()
-        //    {
-        //        Id = req.Id,
-        //        RequiredPoints = req.RequiredPoints,
-        //        Description = req.Description,
-        //        RewardType = req.RewardType,
-        //        children = new List<Child>()
-        //    };
-
-        //    foreach (var childId in req.children)
-        //    {
-        //        var child = context.Child.Find(childId);
-        //        if (child != null)
-        //        {
-        //            newReward.children.Add(child);
-        //        }
-        //    }
-
-        //    context.Rewards.Add(newReward);
-        //    context.SaveChanges();
-
-        //    return CreatedAtAction(nameof(Details), new { Id = newReward.Id }, newReward);
-        //}
-
-        //[HttpPost("AddReward")]
-        //public IActionResult AddReward([FromBody] AddRewardRequest req)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var newReward = new Reward
-        //    {
-        //        RequiredPoints = req.RequiredPoints,
-        //        Description = req.Description,
-        //        RewardType = req.RewardType,
-        //        Children = req.children.Select(childId => context.Child.Find(childId)).Where(child => child != null).ToList()
-        //    };
-
-        //    context.Rewards.Add(newReward);
-        //    context.SaveChanges();
-
-        //    return CreatedAtAction(nameof(Details), new { Id = newReward.Id }, newReward);
-        //}
-        //[HttpPost("AddReward")]
-        //public IActionResult Add(AddRewardRequest req)
-        //{
-        //    var newReward = new Reward()
-        //    {
-        //        Id = req.Id,
-        //        RequiredPoints = req.RequiredPoints,
-        //        Description = req.Description,
-        //        RewardType = req.RewardType,
-        //        children = req.children
-        //    };
-
-        //    context.Rewards.Add(newReward);
-        //    context.SaveChanges();
-
-        //    return CreatedAtAction(nameof(Details), new { Id = newReward.Id }, newReward);
-        //}
+      
 
         [HttpGet("GetAllRewardsForParents")]
         public IActionResult GetAllRewards()
@@ -358,25 +268,6 @@ namespace KidsApi.Controllers
             return Ok(pointsResponse);
         }
 
-
-        //[HttpGet("child/{childId}/taskhistory")]
-        //public ActionResult<List<TaskHistoryResponse>> GetTaskHistory(int childId)
-        //{
-        //    var childTasks = context.Task
-        // .Where(t => t.Id == childId && t.isCompleted)
-        // .ToList();
-
-        //    var taskHistory = childTasks.Select(t => new TaskHistoryResponse
-        //    {
-        //        TaskId = t.Id,
-        //        CategoryName = t.Category.Name,
-        //        Description = t.Description,
-        //        Points = t.Points,
-        //        CompletionDate = t.Date
-        //    }).ToList();
-
-        //    return Ok(taskHistory);
-        //}
 
 
         [HttpPost("Addrewards")]
@@ -428,6 +319,28 @@ namespace KidsApi.Controllers
 
             return Ok(taskHistory);
         }
+        [HttpGet("Child/{id}")]
+     
+        public ActionResult<ChildAccountResponce> GetChildDetails(int id)
+        {
+            var child = context.Child.Find(id);
+            if (child == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new ChildAccountResponce
+            {
+                Id = child.Id,
+                Username = child.Username,
+                Password = child.Password,
+                SavingsAccountNumber = child.SavingsAccountNumber,
+                BaitiAccountNumber = child.BaitiAccountNumber,
+                Points = child.Points,
+                Balance = child.Balance,
+            });
+        }
+
     }
 }
 

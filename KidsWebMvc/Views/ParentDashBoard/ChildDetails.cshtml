@@ -11,17 +11,19 @@
             <div class="col-9">
                 </div>
                 <div class="col-3">
-                <a href="/ParentDashBoard/EditChildDetails" class="btn btn-sm btn-outline-primary">Edit Profile </a>
-            </div>
+                    <a href="/ParentDashBoard/EditChildDetails" class="btn btn-sm btn-outline-primary" onclick="toggleEditForm(@Model.Id)">Edit Profile</a>
+                </div>
             </div>
              <div class="accordion-body">Username: @Model.Username</div>
              <div class="accordion-body">Baiti Account Number: @Model.BaitiAccountNumber  </div>
-             <div class="accordion-body">Saving: @Model.SavingsAccountNumber </div>
+             <div class="accordion-body">Balance: @Model.SavingsAccountNumber </div>
              <div class="accordion-body">Points: @Model.Points</div>
         </div>
 
     </div>
-    
+    <br ></br>
+    <div class="container-xxl flex-grow-1 container-p-y">
+
     <h4 class=" mb-2 "> Rewards</h4>
     @foreach (var reward in ViewBag.rewards)
     {
@@ -31,35 +33,59 @@
             <div class="row">
                 <div class="col-9">
                 </div>
-               
+              
             </div>
-                <div class="accordion-body"> 🧸 @reward.Description    </div>
+
+                <div class="accordion-body"> 🌟 @reward.RequiredPoints </div>
                 <div class="accordion-body"> 🧸 @reward.RewardType     </div>
+                <div class="accordion-body"> 📝 @reward.Description    </div>
+
+
+
 
 
         </div>
 
     </div>
+    <br>
     }
-
+    <br ><br />
     <h4 class=" mb-2 "> Tasks</h4>
     @foreach (var task in ViewBag.tasks)
     {
         <div class="card">
 
-        <div class="card-body">
+            <div class="card-body">
             <div class="row">
+
                 <div class="col-9">
                 </div>
 
-            </div>
-                <div class="accordion-body">🌟 @task.Date       </div>
+               </div>
                 <div class="accordion-body">🌟 @task.Description</div>
-                <div class="accordion-body">🌟 @task.TaskType   </div>
 
+
+            </div>
 
         </div>
-
-    </div>
+        <br>
     }
+
+
+
+    <script>
+        function toggleEditForm(childId) {
+            var editForm = document.getElementById('editForm');
+            var form = document.getElementById('formAuthentication');
+
+            if (editForm.style.display === 'none') {
+                // Set the form action with the child's ID
+                form.action = '/ParentDashBoard/EditChildDetails/' + childId;
+                editForm.style.display = 'block';
+            } else {
+                editForm.style.display = 'none';
+            }
+        }
+    </script>
+
 </div>

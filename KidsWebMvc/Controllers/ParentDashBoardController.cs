@@ -43,75 +43,130 @@ namespace KidsWebMvc.Controllers
           return View(child);
         }
 
-    //[HttpGet("EditChildDetails")]
-    //public async Task<IActionResult> EditChildDetails()
-    //{
-    //  // TODO Get the childe detials form ChildDetails page 
-    //  ChildAccountUpdateRequest child = new ChildAccountUpdateRequest() {
 
+
+
+    //[HttpGet]
+    //public async Task<IActionResult> EditChildDetails(int id)
+    //{
+    //  // Call the ChildDetails action method to fetch existing child details
+    //  var childDetailsActionResult = await ChildDetails(id);
+
+    //  // Check if the ChildDetails action was successful and returned a ViewResult
+    //  if (childDetailsActionResult is ViewResult childDetailsViewResult)
+    //  {
+    //    // Extract the model containing child details from the ChildDetails ViewResult
+    //    var childDetailsModel = childDetailsViewResult.Model as ChildAccountResponce;
+
+    //    // Check if the child details model is not null
+    //    if (childDetailsModel != null)
+    //    {
+    //      // Map the ChildAccountResponce model to ChildAccountUpdateRequest
+    //      var childUpdateRequest = new ChildAccountUpdateRequest
+    //      {
+    //        Id = childDetailsModel.Id,
+    //        // Populate other properties as needed
+    //      };
+
+    //      // Pass the childUpdateRequest model to the EditChildDetails view
+    //      return View(childUpdateRequest);
+    //    }
+    //  }
+
+    //  // Handle the case where child details couldn't be fetched or were invalid
+    //  // You can return an error view or redirect to another action
+    //  return RedirectToAction("Error");
+    //}
+
+    //[HttpPatch]
+    //public async Task<IActionResult> EditChildDetails(int id, ChildAccountUpdateRequest model)
+    //{
+
+    //  var request = new ChildAccountUpdateRequest
+    //  {
+    //    Username = model.Username,
+    //    Password = model.Password,
+    //    Points = model.Points,
+    //    Balance = model.Balance,
     //  };
-    //  return View(child);
+
+    //  var updatedChild = await _client.UpdateDetails(id, request);
+
+    //  if (updatedChild != null)
+    //  {
+    //    TempData["Message"] = "Child account updated successfully";
+    //    return RedirectToAction("Index", new { id = id }); // or redirect to another action
+    //  }
+
+    //  ModelState.AddModelError("", "Failed to update child account");
+    //  return View(model);
     //}
 
     [HttpGet]
-    public async Task<IActionResult> EditChildDetails(int id)
+
+    public async Task<IActionResult> EditChildDetails(int id ,ChildAccountResponce responce)
     {
-      // Call the ChildDetails action method to fetch existing child details
-      var childDetailsActionResult = await ChildDetails(id);
+      //var datas = await _client.GetDetails(id);
+      //if (datas == null)
+      //{
+      //  return NotFound();
+      //}
 
-      // Check if the ChildDetails action was successful and returned a ViewResult
-      if (childDetailsActionResult is ViewResult childDetailsViewResult)
+      ChildAccountUpdateRequest child = new ChildAccountUpdateRequest()
       {
-        // Extract the model containing child details from the ChildDetails ViewResult
-        var childDetailsModel = childDetailsViewResult.Model as ChildAccountResponce;
+        Username = responce.Username,
+        Password = responce.Password,
+        SavingsAccountNumber = responce.SavingsAccountNumber,
+        Balance = responce.Balance,
+        Points = responce.Points,
+      };
 
-        // Check if the child details model is not null
-        if (childDetailsModel != null)
-        {
-          // Map the ChildAccountResponce model to ChildAccountUpdateRequest
-          var childUpdateRequest = new ChildAccountUpdateRequest
-          {
-            Id = childDetailsModel.Id,
-            // Populate other properties as needed
-          };
+     // var child = await _client.GetDetails(id);
 
-          // Pass the childUpdateRequest model to the EditChildDetails view
-          return View(childUpdateRequest);
-        }
-      }
-
-      // Handle the case where child details couldn't be fetched or were invalid
-      // You can return an error view or redirect to another action
-      return RedirectToAction("Error");
+      return View(child);
     }
+
+    //[HttpGet]
+    //public async Task<IActionResult> EditChildDetails(int id)
+    //{
+    //  var childDetails = await _client.GetDetails(id);
+
+    //  var childUpdateRequest = new ChildAccountUpdateRequest
+    //  {
+    //    Username = childDetails.Username,
+    //    Password = childDetails.Password,
+    //    SavingsAccountNumber = childDetails.SavingsAccountNumber,
+    //    Balance = childDetails.Balance,
+    //    Points = childDetails.Points
+    //  };
+
+    //  return View(childUpdateRequest);
+    //}
+
 
     [HttpPatch]
     public async Task<IActionResult> EditChildDetails(int id, ChildAccountUpdateRequest model)
     {
-      if (!ModelState.IsValid)
-      {
-        return View(model);
-      }
-
       var request = new ChildAccountUpdateRequest
       {
         Username = model.Username,
         Password = model.Password,
         Points = model.Points,
-        Balance = model.Balance,
+        Balance = model.Balance
       };
 
       var updatedChild = await _client.UpdateDetails(id, request);
 
-      if (updatedChild != null)
+      if (updatedChild)
       {
         TempData["Message"] = "Child account updated successfully";
-        return RedirectToAction("Details", new { id = id }); // or redirect to another action
+        return RedirectToAction("Index"); 
       }
 
       ModelState.AddModelError("", "Failed to update child account");
       return View(model);
     }
+
 
 
     [HttpGet]
