@@ -1,5 +1,6 @@
 using KidsApi.Models.Entites;
 using KidsApi.Models.Requests;
+using KidsApi.Models.Responses;
 using KidsWebMvc.API;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,25 +27,61 @@ namespace KidsWebMvc.Controllers
         }
 
     [HttpGet]
-    public async Task<IActionResult> ChildDetails(int childId)
+    [Route("ParentDashBoard/ChildDetails/{id}")]
+    public async Task<IActionResult> ChildDetails(int id)
         {
+      
+          var child = await _client.GetDetails(id);
+      var parentId = HttpContext.Session.GetString("ParentID");
+      var rewads = await _client.GetRewards(Int32.Parse(parentId));
+      ViewBag.rewads = rewads;
 
-          var child = await _client.GetDetails(childId);
-
-          return View(child);
+      return View(child);
         }
 
-    [HttpGet]
-    public async Task<IActionResult> EditChildDetails()
-    {
-      // TODO Get the childe detials form ChildDetails page 
-      ChildAccountUpdateRequest child = new ChildAccountUpdateRequest() {
+    //[HttpGet("EditChildDetails")]
+    //public async Task<IActionResult> EditChildDetails()
+    //{
+    //  // TODO Get the childe detials form ChildDetails page 
+    //  ChildAccountUpdateRequest child = new ChildAccountUpdateRequest() {
 
-      };
-      return View(child);
+    //  };
+    //  return View(child);
+    //}
+
+    [HttpGet]
+    public async Task<IActionResult> EditChildDetails(int id)
+    {
+      // Call the ChildDetails action method to fetch existing child details
+      var childDetailsActionResult = await ChildDetails(id);
+
+      // Check if the ChildDetails action was successful and returned a ViewResult
+      if (childDetailsActionResult is ViewResult childDetailsViewResult)
+      {
+        // Extract the model containing child details from the ChildDetails ViewResult
+        var childDetailsModel = childDetailsViewResult.Model as ChildAccountResponce;
+
+        // Check if the child details model is not null
+        if (childDetailsModel != null)
+        {
+          // Map the ChildAccountResponce model to ChildAccountUpdateRequest
+          var childUpdateRequest = new ChildAccountUpdateRequest
+          {
+            Id = childDetailsModel.Id,
+            // Populate other properties as needed
+          };
+
+          // Pass the childUpdateRequest model to the EditChildDetails view
+          return View(childUpdateRequest);
+        }
+      }
+
+      // Handle the case where child details couldn't be fetched or were invalid
+      // You can return an error view or redirect to another action
+      return RedirectToAction("Error");
     }
 
-      [HttpPatch]
+    [HttpPatch]
     public async Task<IActionResult> EditChildDetails(int id, ChildAccountUpdateRequest model)
     {
       if (!ModelState.IsValid)

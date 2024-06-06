@@ -113,9 +113,9 @@ namespace KidsWebMvc.API
             var newReward = await response.Content.ReadFromJsonAsync<Reward>();
             return newReward;
         }
-        public async Task<List<Reward>> GetRewards(int parentId)
+        public async Task<List<Reward>> GetRewards(int childId)
         {
-            var response = await _api.GetAsync("api/child/{Id}/GetRewards");
+            var response = await _api.GetAsync("api/child/1/GetRewards");
             response.EnsureSuccessStatusCode();
 
             var rewards = await response.Content.ReadFromJsonAsync<List<Reward>>();

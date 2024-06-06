@@ -23,83 +23,7 @@ namespace KidsApi.Controllers
             _context = context;
             _configuration = configuration;
         }
-        //[HttpPost("Login")]
-        //public IActionResult ChildLogin(ChildLoginRequest request)
-        //{
-        //    var response = _service.ChildGenerateToken(request.Username, request.Password);
-
-        //    if (response.IsValid)
-        //    {
-        //        return Ok(new ChildLoginResponse { Token = response.Token });
-        //    }
-        //    else
-        //    {
-        //        return BadRequest("Username and/or Password is wrong");
-        //    }
-
-
-        //}
-
-        //[HttpPost("login")]
-        //public ActionResult Login([FromBody] ChildLoginRequest request)
-        //{
-        //    // validate request
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    // find child entity by username and password
-        //    var child = _context.Child
-        //        .Where(c => c.Username == request.Username && c.Password == request.Password)
-        //        .FirstOrDefault();
-
-        //    if (child == null)
-        //    {
-        //        return Unauthorized("Invalid username or password");
-        //    }
-
-        //    // return child's details
-        //    return Ok(new 
-        //    {
-        //        ChildId = child.Id,
-
-        //    });
-        ////}
-        //[HttpPost("login")]
-        //public ActionResult Login([FromBody] ChildLoginRequest request)
-        //{
-        //    // Validate request
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    // Find child entity by username and password
-        //    var child = _context.Child
-        //        .Where(c => c.Username == request.Username && c.Password == request.Password)
-        //        .FirstOrDefault();
-
-        //    if (child == null)
-        //    {
-        //        return Unauthorized("Invalid username or password");
-        //    }
-
-        //    // Generate token for the child
-        //    var tokenService = new TokenService(_configuration , _context);
-        //    var tokenResponse = tokenService.ChildGenerateToken(child.Username, child.Password);
-
-        //    if (!tokenResponse.IsValid)
-        //    {
-        //        return BadRequest("Failed to generate token");
-        //    }
-
-        //    // Return child's details along with their tasks
-        //    return Ok(new ChildLoginResponse
-        //    {
-        //        Token = tokenResponse.Token
-        //    });
-        //}
+        
         [HttpPost("login")]
         public ActionResult Login([FromBody] ChildLoginRequest request)
         {
@@ -130,7 +54,7 @@ namespace KidsApi.Controllers
                 Balance = child.Balance,
                 Points  = child.Points,
                 ParentId = child.ParentId,
-                ChildId = child.ChildId,
+                ChildId = child.Id,
                 
             });
         }
@@ -151,52 +75,21 @@ namespace KidsApi.Controllers
         [HttpGet("{childId}/GetTasks")]
         public IActionResult GetTasks(int childId)
         {
-            // Find child entity by ID
-            var child = _context.Child.FirstOrDefault(c => c.ChildId == childId);
-
-            if (child == null)
-            {
-                return NotFound("Child not found");
-            }
-
-            // Find tasks associated with the child
-            var tasks = _context.Task.Where(t => t.ParentId == child.ParentId && t.Id == childId).ToList();
-
+            var tasks = _context.Task.Where(t => t.childId == childId).ToList();
             return Ok(tasks);
         }
 
-        [HttpGet("{Id}/GetRewards")]
-        public IActionResult GetRewards(int parentId)
+        [HttpGet("{childId}/GetRewards")]
+        public IActionResult GetRewards(int childId)
         {
-            var rewards = _context.Rewards.Where(t => t.Id == parentId).ToList();
+            var rewards = _context.Rewards.Where(t => t.Id == childId).ToList();
             return Ok(rewards);
         }
-
-        //[HttpPut("{childId}/tasks/{taskId}/complete")]
-        //public IActionResult CompleteTask(int childId, int taskId)
-        //{
-        //    var child = _context.Child.Include(c => c.Tasks).FirstOrDefault(c => c.Id == childId);
-        //    if (child == null)
-        //    {
-        //        return NotFound(new { message = "Child not found" });
-        //    }
-
-        //    var task = child.Tasks.FirstOrDefault(t => t.Id == taskId);
-        //    if (task == null)
-        //    {
-        //        return NotFound(new { message = "Task not found" });
-        //    }
-
-        //    task.isCompleted = true;
-        //    _context.SaveChanges();
-
-        //    return Ok();
-        //}
 
         [HttpPut("{childId}/tasks/{taskId}/complete")]
         public IActionResult CompleteTask(int childId, int taskId)
         {
-            var child = _context.Child.Include(c => c.Tasks).FirstOrDefault(c => c.ChildId == childId);
+            var child = _context.Child.Include(c => c.Tasks).FirstOrDefault(c => c.Id == childId);
             if (child == null)
             {
                 return NotFound(new { message = "Child not found" });
@@ -210,8 +103,6 @@ namespace KidsApi.Controllers
 
             var pointsToAdd = task.Points;
             child.Points += pointsToAdd;
-            _context.SaveChanges();
-
             task.isCompleted = true;
             _context.SaveChanges();
 
@@ -222,7 +113,7 @@ namespace KidsApi.Controllers
         [HttpGet("{childId}/balance")]
         public ActionResult<GetBalanceResponse> GetBalance(int childId)
         {
-            var child = _context.Child.FirstOrDefault(c => c.ChildId == childId);
+            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
             if (child == null)
             {
                 return NotFound();
@@ -239,7 +130,7 @@ namespace KidsApi.Controllers
         [HttpPost("{childId}/transfer-to-baitiaccount")]
         public IActionResult TransferToBaitiAccount(int childId, TransferToBaitiAccountRequest request)
         {
-            var child = _context.Child.FirstOrDefault(c => c.ChildId == childId);
+            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
 
             if (child == null)
             {
@@ -274,7 +165,7 @@ namespace KidsApi.Controllers
         [HttpGet("GetPoints/{childId}")]
         public ActionResult<PointsResponse> GetPoints(int childId)
         {
-            var child = _context.Child.FirstOrDefault(c => c.ChildId == childId);
+            var child = _context.Child.FirstOrDefault(c => c.Id == childId);
             if (child == null)
             {
                 return NotFound();
@@ -352,7 +243,7 @@ namespace KidsApi.Controllers
 
             var child = parent.ParentChildRelationships
                 .Select(pcr => pcr.Child)
-                .FirstOrDefault(c => c.ChildId == childId);
+                .FirstOrDefault(c => c.Id == childId);
 
             if (child == null)
             {

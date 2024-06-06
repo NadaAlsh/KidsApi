@@ -90,7 +90,7 @@ namespace KidsApi.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-            new Claim(ClaimTypes.Name, child.ChildId.ToString()),
+            new Claim(ClaimTypes.Name, child.Id.ToString()),
             new Claim(ClaimTypes.Role, "Child")
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
