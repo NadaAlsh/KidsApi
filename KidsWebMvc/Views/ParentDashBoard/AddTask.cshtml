@@ -19,13 +19,20 @@
                 </div>
                 <div class="mb-3">
                     <label for="ChildId" class="form-label">Child</label>
-                    <input type="text"
+                    <select class="form-control" id="child" name="childId" required>
+                        <option value="">Choose Child</option>
+                        @foreach (var child in ViewBag.Children)
+                        {
+                            <option value="@child.Value">@child.Text</option>
+                        }
+                    </select>
+                    @* <input type="text"
                            class="form-control"
                            id="ChildId"
                            value="@Model.ChildId"
                            name="ChildId"
                            placeholder="Child name "
-                           autofocus />
+                           autofocus /> *@
                 </div>
                 <div class="mb-3">
                     <label for="Description" class="form-label">Description</label>

@@ -3,6 +3,7 @@ using KidsApi.Models.Requests;
 using KidsApi.Models.Responses;
 using KidsWebMvc.API;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace KidsWebMvc.Controllers
 {
@@ -225,6 +226,17 @@ namespace KidsWebMvc.Controllers
     [HttpGet]
     public async Task<IActionResult> AddReward()
     {
+      // Get the list of children from the API
+      var parentId = HttpContext.Session.GetString("ParentID");
+
+      var children = await _client.GetChildren(Int32.Parse(parentId));
+
+      ViewBag.Children = children.Select(c => new SelectListItem
+      {
+        Value = c.Id.ToString(),
+        Text = c.Username
+      }).ToList();
+
       var reward = new AddRewardRequest();
       return View(reward);
     }
@@ -232,14 +244,24 @@ namespace KidsWebMvc.Controllers
     [HttpPost]
     public async Task<IActionResult> AddReward(AddRewardRequest model)
     {
-     
+      // Get the list of children from the API
+      var parentId = HttpContext.Session.GetString("ParentID");
+
+      var children = await _client.GetChildren(Int32.Parse(parentId));
+
+      ViewBag.Children = children.Select(c => new SelectListItem
+      {
+        Value = c.Id.ToString(),
+        Text = c.Username
+      }).ToList();
+
+      // Prepare the request to add a reward
       var request = new AddRewardRequest
       {
-             RewardType = model.RewardType,
-             Description =model.Description,
-             RequiredPoints = model.RequiredPoints,
-             ChildId = model.ChildId,
-
+        RewardType = model.RewardType,
+        Description = model.Description,
+        RequiredPoints = model.RequiredPoints,
+        ChildId = model.ChildId
       };
 
       var isAdded = await _client.AddReward(request);
@@ -253,6 +275,38 @@ namespace KidsWebMvc.Controllers
       ModelState.AddModelError("", "Failed to add reward");
       return View(model);
     }
+
+    //[HttpPost]
+    //public async Task<IActionResult> AddReward(AddRewardRequest model)
+    //{
+
+    //  var children = await _client.GetChildren(model.ChildId);
+    //  ViewBag.Children = children.Select(c => new SelectListItem
+    //  {
+    //    Value = c.Id.ToString(),
+    //    Text = c.Username
+
+    //  }).ToList();
+    //  var request = new AddRewardRequest
+    //  {
+    //         RewardType = model.RewardType,
+    //         Description =model.Description,
+    //         RequiredPoints = model.RequiredPoints,
+    //         ChildId = model.ChildId,
+
+    //  };
+
+    //  var isAdded = await _client.AddReward(request);
+
+    //  if (isAdded)
+    //  {
+    //    TempData["Message"] = "Reward added successfully";
+    //    return RedirectToAction("Index"); // or redirect to another action
+    //  }
+
+    //  ModelState.AddModelError("", "Failed to add reward");
+    //  return View(model);
+    //}
 
 
 
@@ -272,6 +326,16 @@ namespace KidsWebMvc.Controllers
     [HttpGet]
     public async Task<IActionResult> AddTask()
     {
+      var parentId = HttpContext.Session.GetString("ParentID");
+
+      var children = await _client.GetChildren(Int32.Parse(parentId));
+
+      ViewBag.Children = children.Select(c => new SelectListItem
+      {
+        Value = c.Id.ToString(),
+        Text = c.Username
+      }).ToList();
+
       var request = new TaskRequest();
       return View(request);
     }

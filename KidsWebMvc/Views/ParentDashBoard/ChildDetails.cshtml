@@ -23,54 +23,52 @@
     </div>
     <br ></br>
     <div class="container-xxl flex-grow-1 container-p-y">
-
     <h4 class=" mb-2 "> Rewards</h4>
+        <div class="row">
     @foreach (var reward in ViewBag.rewards)
     {
-        <div class="card">
+            <div class="col-6">
+                <div class="card">
 
         <div class="card-body">
-            <div class="row">
-                <div class="col-9">
-                </div>
-              
-            </div>
+          
 
                 <div class="accordion-body"> 🌟 @reward.RequiredPoints </div>
                 <div class="accordion-body"> 🧸 @reward.RewardType     </div>
                 <div class="accordion-body"> 📝 @reward.Description    </div>
 
 
-
-
-
         </div>
-
+                    </div>
+                    <br><br />
     </div>
     <br>
     }
+        </div>
     <br ><br />
     <h4 class=" mb-2 "> Tasks</h4>
+
+        <div class="row">
     @foreach (var task in ViewBag.tasks)
     {
-        <div class="card">
+
+            <div class="col-6">
+                <div class="card">
 
             <div class="card-body">
-            <div class="row">
 
-                <div class="col-9">
+                            <div class="accordion-body">🌟 @task.Description</div>
+
+                    </div>
+                       
                 </div>
-
-               </div>
-                <div class="accordion-body">🌟 @task.Description</div>
-
-
-            </div>
-
-        </div>
+                    <br><br />
+                </div>
         <br>
     }
 
+        </div>
+        
 
 
     <script>
