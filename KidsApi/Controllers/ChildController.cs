@@ -82,7 +82,7 @@ namespace KidsApi.Controllers
         [HttpGet("{childId}/GetRewards")]
         public IActionResult GetRewards(int childId)
         {
-            var rewards = _context.Rewards.Where(t => t.Id == childId).ToList();
+            var rewards = _context.Rewards.Where(t => t.ChildId == childId).ToList();
             return Ok(rewards);
         }
 

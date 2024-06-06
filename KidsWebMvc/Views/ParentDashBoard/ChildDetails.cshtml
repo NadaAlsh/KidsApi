@@ -16,20 +16,16 @@
             </div>
              <div class="accordion-body">Username: @Model.Username</div>
              <div class="accordion-body">Baiti Account Number: @Model.BaitiAccountNumber  </div>
-             <div class="accordion-body">Saving Account Number: @Model.SavingsAccountNumber </div>
+             <div class="accordion-body">Saving: @Model.SavingsAccountNumber </div>
              <div class="accordion-body">Points: @Model.Points</div>
         </div>
 
     </div>
-
-</div>
-
-
-
-<div class="container-xxl flex-grow-1 container-p-y">
+    
     <h4 class=" mb-2 "> Rewards</h4>
-
-    <div class="card">
+    @foreach (var reward in ViewBag.rewards)
+    {
+        <div class="card">
 
         <div class="card-body">
             <div class="row">
@@ -37,21 +33,19 @@
                 </div>
                
             </div>
-            <div class="accordion-body"> 🧸 Teela gift 1239 points  </div>
+                <div class="accordion-body"> 🧸 @reward.Description    </div>
+                <div class="accordion-body"> 🧸 @reward.RewardType     </div>
+
 
         </div>
 
     </div>
-</div>
+    }
 
-
-
-
-
-<div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class=" mb-2 "> Requests</h4>
-
-    <div class="card">
+    <h4 class=" mb-2 "> Tasks</h4>
+    @foreach (var task in ViewBag.tasks)
+    {
+        <div class="card">
 
         <div class="card-body">
             <div class="row">
@@ -59,9 +53,13 @@
                 </div>
 
             </div>
-            <div class="accordion-body">🌟 Fatma wants to transfer 1000 points into gold    </div>
+                <div class="accordion-body">🌟 @task.Date       </div>
+                <div class="accordion-body">🌟 @task.Description</div>
+                <div class="accordion-body">🌟 @task.TaskType   </div>
+
 
         </div>
 
     </div>
+    }
 </div>

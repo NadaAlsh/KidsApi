@@ -32,11 +32,15 @@ namespace KidsWebMvc.Controllers
         {
       
           var child = await _client.GetDetails(id);
-      var parentId = HttpContext.Session.GetString("ParentID");
-      var rewads = await _client.GetRewards(Int32.Parse(parentId));
-      ViewBag.rewads = rewads;
+     
+          var rewards = await _client.GetRewards(id);
+          var tasks = await _client.GetTasks(id);
 
-      return View(child);
+          ViewBag.rewards = rewards;
+          ViewBag.tasks = tasks;
+
+
+          return View(child);
         }
 
     //[HttpGet("EditChildDetails")]
@@ -121,32 +125,40 @@ namespace KidsWebMvc.Controllers
     [HttpPost]
     public async Task<IActionResult> AddChild(AddChildRequest model)
     {
-      if (!ModelState.IsValid)
+
+      var parentId = HttpContext.Session.GetString("ParentID");
+
+      if (parentId != null)
       {
-        return View(model);
+        var request = new AddChildRequest
+        {
+          ParentId = Int32.Parse(parentId),
+          Username = model.Username,
+
+          Password = model.Password,
+
+          SavingsAccountNumber = model.SavingsAccountNumber,
+
+          BaitiAccountNumber = model.BaitiAccountNumber,
+
+          Points = model.Points,
+
+        };
+        var isAdded = await _client.AddChild(request);
+
+        if (isAdded)
+        {
+          TempData["Message"] = "Child added successfully";
+          return RedirectToAction("Index");
+        }
       }
-      var request = new AddChildRequest
-      {
-        Username = model.Username,
-
-        Password = model.Password,
-
-        SavingsAccountNumber = model.SavingsAccountNumber,
-
-        Points = model.Points,
-   
-      };
-      var newChild = await _client.AddChild(request);
-
-      if (newChild != null)
-      {
-        TempData["Message"] = "Child added successfully";
-        return RedirectToAction("Index"); 
-      }
+     
 
       ModelState.AddModelError("", "Failed to add child");
       return View(model);
     }
+
+
 
         public async Task<IActionResult> TaskHistory(int childId)
         {
@@ -158,17 +170,14 @@ namespace KidsWebMvc.Controllers
     [HttpGet]
     public async Task<IActionResult> AddReward()
     {
-      return View();
+      var reward = new AddRewardRequest();
+      return View(reward);
     }
 
     [HttpPost]
     public async Task<IActionResult> AddReward(AddRewardRequest model)
     {
-      if (!ModelState.IsValid)
-      {
-        return View(model);
-      }
-
+     
       var request = new AddRewardRequest
       {
              RewardType = model.RewardType,
@@ -178,12 +187,12 @@ namespace KidsWebMvc.Controllers
 
       };
 
-      var newReward = await AddReward(request);
+      var isAdded = await _client.AddReward(request);
 
-      if (newReward != null)
+      if (isAdded)
       {
         TempData["Message"] = "Reward added successfully";
-        return RedirectToAction("Rewards"); // or redirect to another action
+        return RedirectToAction("Index"); // or redirect to another action
       }
 
       ModelState.AddModelError("", "Failed to add reward");
@@ -208,39 +217,42 @@ namespace KidsWebMvc.Controllers
     [HttpGet]
     public async Task<IActionResult> AddTask()
     {
-      return View();
+      var request = new TaskRequest();
+      return View(request);
     }
 
     [HttpPost]
     public async Task<IActionResult> AddTask(TaskRequest model)
     {
-      if (!ModelState.IsValid)
-      {
-        return View(model);
-      }
 
-      var request = new TaskRequest
+      var parentId = HttpContext.Session.GetString("ParentID");
+
+      if (parentId != null)
       {
+        var request = new TaskRequest
+        {
+          ParentId = Int32.Parse(parentId),
           ChildId = model.ChildId,
           TaskType = model.TaskType,
           Description = model.Description,
           Date = model.Date,
           Points = model.Points,
           CategoryId = model.CategoryId,
-      };
+        };
 
-      var newTask = await _client.AddTask(request);
+          var isAdded = await _client.AddTask(request);
 
-      if (newTask != null)
-      {
-        TempData["Message"] = "Task added successfully";
-        return RedirectToAction("Tasks"); // or redirect to another action
+        if (isAdded)
+        {
+          TempData["Message"] = "Task added successfully";
+          return RedirectToAction("Index"); // or redirect to another action
+        }
+
       }
 
       ModelState.AddModelError("", "Failed to add task");
       return View(model);
     }
-
 
   }
 }

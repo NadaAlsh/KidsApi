@@ -1,5 +1,5 @@
-@using KidsApi.Models.Entites
-@model Reward
+@using KidsApi.Models.Requests
+@model AddRewardRequest
 <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Content -->
     <!-- Register -->
@@ -10,13 +10,14 @@
             <h4 class=" mb-2 text-center">Rewards 🥳</h4>
             <p class="text-center">Let Your kids dashboard be more intersting 🧸 </p>
 
-            <form id="formAuthentication" class="mb-3" asp-action="AddRewards" method="post">
+            <form id="formAuthentication" class="mb-3" asp-action="AddReward" method="post">
                 <div class="mb-3">
                     <label for="reward" class="form-label">Rewards Type</label>
                     <input type="text"
                            class="form-control"
                            id="rewardtype"
                            name="rewardtype"
+                           value="@Model.RewardType"
                            placeholder=""
                            autofocus />
                 </div>
@@ -26,6 +27,7 @@
                            class="form-control"
                            id="description"
                            name="description"
+                           value="@Model.Description"
                            placeholder=""
                            autofocus />
                 </div>
@@ -35,6 +37,7 @@
                            class="form-control"
                            id="requiredPoints"
                            name="requiredPoints"
+                           value="@Model.RequiredPoints"
                            placeholder=""
                            autofocus />
                 </div>
@@ -44,6 +47,7 @@
                            class="form-control"
                            id="childId"
                            name="childId"
+                           value="@Model.ChildId"
                            placeholder=""
                            autofocus />
                 </div>
@@ -54,7 +58,7 @@
 
 
                 <div class="text-center">
-                    <button class="btn btn-sm btn-outline-primary" type="submit">Add Rewards</button>
+                    <button class="btn btn-sm btn-outline-primary" type="submit">Add Reward</button>
                 </div>
             </form>
 

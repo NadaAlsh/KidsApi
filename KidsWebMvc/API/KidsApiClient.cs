@@ -74,18 +74,21 @@ namespace KidsWebMvc.API
         public async Task<IEnumerable<MyTask>> GetTasks(int childId)
         {
             var response = await _api
-                .GetFromJsonAsync<IEnumerable<MyTask>>($"api/child/GetTasks/{childId}");
+                .GetFromJsonAsync<IEnumerable<MyTask>>($"api/Child/{childId}/GetTasks");
             return response;
         }
-        public async Task<MyTask> AddTask(TaskRequest request)
-        {
-            var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
-            var response = await _api.PostAsync("api/AddTask", content);
-            response.EnsureSuccessStatusCode();
 
-            var newTask = await response.Content.ReadFromJsonAsync<MyTask>();
-            return newTask;
+
+        public async Task<bool> AddTask(TaskRequest request)
+        {
+           var json = JsonSerializer.Serialize(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var responce = await _api.PostAsync("api/parent/AddTask", content);
+
+            return responce.IsSuccessStatusCode;
         }
+
+
         public async Task<ChildAccountResponce> GetDetails(int id)
         {
       var response = await _api
@@ -104,18 +107,18 @@ namespace KidsWebMvc.API
       return updatedChild;
     }
 
-    public async Task<Reward> AddReward(AddRewardRequest req)
+    public async Task<bool> AddReward(AddRewardRequest req)
         {
-            var content = new StringContent(JsonSerializer.Serialize(req), Encoding.UTF8, "application/json");
-            var response = await _api.PostAsync("api/parent/AddReward", content);
-            response.EnsureSuccessStatusCode();
 
-            var newReward = await response.Content.ReadFromJsonAsync<Reward>();
-            return newReward;
+         var json = JsonSerializer.Serialize(req);
+         var content = new StringContent(json, Encoding.UTF8, "application/json");
+         var response = await _api.PostAsync("api/parent/AddRewards", content);
+
+            return response.IsSuccessStatusCode;
         }
         public async Task<List<Reward>> GetRewards(int childId)
         {
-            var response = await _api.GetAsync("api/child/1/GetRewards");
+            var response = await _api.GetAsync($"api/child/{childId}/GetRewards");
             response.EnsureSuccessStatusCode();
 
             var rewards = await response.Content.ReadFromJsonAsync<List<Reward>>();
@@ -129,16 +132,14 @@ namespace KidsWebMvc.API
             var rewards = await response.Content.ReadFromJsonAsync<List<Reward>>();
             return rewards;
         }
-        public async Task<Child> AddChild(AddChildRequest req)
+        public async Task<Boolean> AddChild(AddChildRequest req)
         {
             var json = JsonSerializer.Serialize(req);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _api.PostAsync("api/parent/AddChild", content);
-            response.EnsureSuccessStatusCode();
-
-            var newChild = await response.Content.ReadFromJsonAsync<Child>();
-            return newChild;
+            var response = await _api.PostAsync("api/parent/addchild", content);
+           
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<IActionResult> CompleteTask(int childId, int taskId)
