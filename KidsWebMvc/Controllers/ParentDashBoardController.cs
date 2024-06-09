@@ -270,7 +270,7 @@ namespace KidsWebMvc.Controllers
           Description = model.Description,
           Date = model.Date,
           Points = model.Points,
-          CategoryId = model.CategoryId,
+          CategoryId = 1,
         };
 
           var isAdded = await _client.AddTask(request);
