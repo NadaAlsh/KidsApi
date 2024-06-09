@@ -45,65 +45,6 @@ namespace KidsWebMvc.Controllers
           return View(child);
         }
 
-
-
-
-    //[HttpGet]
-    //public async Task<IActionResult> EditChildDetails(int id)
-    //{
-    //  // Call the ChildDetails action method to fetch existing child details
-    //  var childDetailsActionResult = await ChildDetails(id);
-
-    //  // Check if the ChildDetails action was successful and returned a ViewResult
-    //  if (childDetailsActionResult is ViewResult childDetailsViewResult)
-    //  {
-    //    // Extract the model containing child details from the ChildDetails ViewResult
-    //    var childDetailsModel = childDetailsViewResult.Model as ChildAccountResponce;
-
-    //    // Check if the child details model is not null
-    //    if (childDetailsModel != null)
-    //    {
-    //      // Map the ChildAccountResponce model to ChildAccountUpdateRequest
-    //      var childUpdateRequest = new ChildAccountUpdateRequest
-    //      {
-    //        Id = childDetailsModel.Id,
-    //        // Populate other properties as needed
-    //      };
-
-    //      // Pass the childUpdateRequest model to the EditChildDetails view
-    //      return View(childUpdateRequest);
-    //    }
-    //  }
-
-    //  // Handle the case where child details couldn't be fetched or were invalid
-    //  // You can return an error view or redirect to another action
-    //  return RedirectToAction("Error");
-    //}
-
-    //[HttpPatch]
-    //public async Task<IActionResult> EditChildDetails(int id, ChildAccountUpdateRequest model)
-    //{
-
-    //  var request = new ChildAccountUpdateRequest
-    //  {
-    //    Username = model.Username,
-    //    Password = model.Password,
-    //    Points = model.Points,
-    //    Balance = model.Balance,
-    //  };
-
-    //  var updatedChild = await _client.UpdateDetails(id, request);
-
-    //  if (updatedChild != null)
-    //  {
-    //    TempData["Message"] = "Child account updated successfully";
-    //    return RedirectToAction("Index", new { id = id }); // or redirect to another action
-    //  }
-
-    //  ModelState.AddModelError("", "Failed to update child account");
-    //  return View(model);
-    //}
-
     [HttpGet]
 
     public async Task<IActionResult> EditChildDetails(int id ,ChildAccountResponce responce)
@@ -174,9 +115,7 @@ namespace KidsWebMvc.Controllers
     [HttpGet]
     public async Task<IActionResult> AddChild()
     {
-      var model = new AddChildRequest(); 
-
-      return View(model);
+      return View();
     }
 
     [HttpPost]
@@ -277,40 +216,6 @@ namespace KidsWebMvc.Controllers
       return View(model);
     }
 
-    //[HttpPost]
-    //public async Task<IActionResult> AddReward(AddRewardRequest model)
-    //{
-
-    //  var children = await _client.GetChildren(model.ChildId);
-    //  ViewBag.Children = children.Select(c => new SelectListItem
-    //  {
-    //    Value = c.Id.ToString(),
-    //    Text = c.Username
-
-    //  }).ToList();
-    //  var request = new AddRewardRequest
-    //  {
-    //         RewardType = model.RewardType,
-    //         Description =model.Description,
-    //         RequiredPoints = model.RequiredPoints,
-    //         ChildId = model.ChildId,
-
-    //  };
-
-    //  var isAdded = await _client.AddReward(request);
-
-    //  if (isAdded)
-    //  {
-    //    TempData["Message"] = "Reward added successfully";
-    //    return RedirectToAction("Index"); // or redirect to another action
-    //  }
-
-    //  ModelState.AddModelError("", "Failed to add reward");
-    //  return View(model);
-    //}
-
-
-
     public async Task<IActionResult> Balance(int childId)
     {
       var balance = await _client.GetBalance(childId);
@@ -346,6 +251,14 @@ namespace KidsWebMvc.Controllers
     {
 
       var parentId = HttpContext.Session.GetString("ParentID");
+
+      var children = await _client.GetChildren(Int32.Parse(parentId));
+
+      ViewBag.Children = children.Select(c => new SelectListItem
+      {
+        Value = c.Id.ToString(),
+        Text = c.Username
+      }).ToList();
 
       if (parentId != null)
       {
