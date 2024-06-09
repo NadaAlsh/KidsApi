@@ -49,8 +49,7 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <span class="fw-medium d-block">Bader</span>
-                                    <small class="text-muted">Admin</small>
+                                    <span class="fw-medium d-block">@ViewBag.username</span>
                                 </div>
                             </div>
                         </a>
@@ -120,26 +119,24 @@
     <!--/ Child Card  -->
 
     @* <div class="col-12 col-md-8 col-lg-4 order-3 order-md-2"> *@
-    <div class="col-6">
-        <h4 class="col-3 text-center">Children </h4>
+    <div class="row">
+        <h4 class="col-12">Children </h4>
 
-        <div class="row">
             @foreach(var child in ViewBag.children)
             {
                 @* <div class="col-6 mb-4"> *@
                     <div class="col-6">
-                    <div class="card">
+                    <div class="card text-center">
                         <a href="/ParentDashBoard/ChildDetails/@child.Id" >
                             <div class="card-body">
-                                <div class="card-title d-flex align-items-start justify-content-between">
-                                    <div class="avatar flex-shrink-0">
+                                <div class="card-title">
+                                    
                                         <img src="https://cdn-icons-png.flaticon.com/128/4605/4605461.png" alt="Child" class="rounded" />
                                     </div>
 
-                                </div>
-                                <span class="fw-medium d-block mb-1">
+                                <div class="card-text">
                                     @child.Username
-                                </span>
+                                </div>
 
                             </div>
                         </a>
@@ -148,9 +145,12 @@
                     <br><br />
                 </div>
             }
-           
-            
-        </div>
+
+        @if (ViewBag.children.Count == 0)
+        {
+            <h6 class="col-12">No children added</h6>
+        }
+
     </div>
 
 

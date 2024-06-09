@@ -66,9 +66,15 @@ namespace KidsWebMvc.API
 
         public async Task<IEnumerable<Child>> GetChildren(int parentId)
         {
-            var response = await _api
-                .GetFromJsonAsync<IEnumerable<Child>>($"api/parent/GetChildren/{parentId}");
-            return response;
+            var response = await _api.GetAsync($"api/parent/GetChildren/{parentId}");
+            if (response.IsSuccessStatusCode)
+            {
+              var children = await response.Content.ReadFromJsonAsync<IEnumerable<Child>>();
+
+              return children;
+            }
+
+          return new List<Child>();
         }
 
         public async Task<IEnumerable<MyTask>> GetTasks(int childId)

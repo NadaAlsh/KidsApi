@@ -4,6 +4,7 @@ using KidsApi.Models.Responses;
 using KidsWebMvc.API;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
 
 namespace KidsWebMvc.Controllers
 {
@@ -23,7 +24,7 @@ namespace KidsWebMvc.Controllers
 
           var children = await _client.GetChildren(Int32.Parse(parentId));
           ViewBag.username = parentUsername;
-          ViewBag.children = children;
+          ViewBag.children = children;;
           return View();
         }
 
