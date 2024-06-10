@@ -16,7 +16,7 @@
             </div>
              <div class="accordion-body">Username: @Model.Username</div>
              <div class="accordion-body">Baiti Account Number: @Model.BaitiAccountNumber  </div>
-             <div class="accordion-body">Balance: @Model.SavingsAccountNumber </div>
+            <div class="accordion-body">Balance:  @Model.SavingsAccountNumber  KWD  </div>
              <div class="accordion-body">Points: @Model.Points</div>
         </div>
 
@@ -33,9 +33,9 @@
         <div class="card-body">
           
 
-                <div class="accordion-body"> 🌟 @reward.RequiredPoints </div>
-                <div class="accordion-body"> 🧸 @reward.RewardType     </div>
-                <div class="accordion-body"> 📝 @reward.Description    </div>
+                <div class="accordion-body"> 🌟 Required Points:  @reward.RequiredPoints </div>
+                <div class="accordion-body"> 🧸 Reward Type:  @reward.RewardType     </div>
+                <div class="accordion-body"> 📝 Description:  @reward.Description    </div>
 
 
         </div>
@@ -59,7 +59,8 @@
 
             <div class="card-body">
 
-                            <div class="accordion-body">🌟 @task.TaskType - @task.Description</div>
+                            <div class="accordion-body">🌟 @task.TaskType</div>
+                            <div class="accordion-body">📝 Description:  @task.Description</div>
 
                     </div>
                        
